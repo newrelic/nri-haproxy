@@ -1,0 +1,21 @@
+name: com.newrelic.memcached
+description: Reports status and metrics for memcached service
+protocol_version: 1
+os: linux
+
+commands:
+  all_data:
+    command:
+      - ./bin/nr-memcached
+    interval: 15
+  metrics:
+    command:
+      - ./bin/nr-memcached
+      - --metrics
+    interval: 15
+  inventory:
+    command:
+      - ./bin/nr-memcached
+      - --inventory
+    prefix: config/nr-memcached
+    interval: 15
