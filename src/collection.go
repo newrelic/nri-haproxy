@@ -10,6 +10,7 @@ import (
   "fmt"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
@@ -128,13 +129,16 @@ func collectInventoryOfType(entityType string, from map[string]string, i *integr
 
 // TODO naming
 func collectMetricsOfType(entityType string, collect map[string]metricDefinition, from map[string]string, i *integration.Integration) {
-	e, err := i.Entity(from["pxname"], entityType)
+  e, err := i.Entity(from["pxname"]+":"+from["svname"], entityType)
 	if err != nil {
 		log.Error("Failed to create entity for %s: %s", from["pxname"], err.Error())
 		return
 	}
 
-	ms := e.NewMetricSet(fmt.Sprintf("HAProxy%sSample", strings.Title(entityType)))
+	ms := e.NewMetricSet(fmt.Sprintf("HAProxy%sSample", strings.Title(entityType)),
+    metric.Attribute{Key:"displayName", Value:e.Metadata.Name},
+    metric.Attribute{Key:"displayName", Value: entityType +":"+ e.Metadata.Name},
+  )
 
 	for metricName, metricValue := range from {
 		if metricValue == "" {
@@ -143,7 +147,10 @@ func collectMetricsOfType(entityType string, collect map[string]metricDefinition
 
 		def, ok := collect[metricName]
 		if ok {
-			ms.SetMetric(def.MetricName, metricValue, def.SourceType)
+      err := ms.SetMetric(def.MetricName, metricValue, def.SourceType)
+      if err != nil {
+        log.Error("Failed to set metric %s for entity %s: %s", metricName, from["pxname"], err.Error())
+      }
 		}
 	}
 }

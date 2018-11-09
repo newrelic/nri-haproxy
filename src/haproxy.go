@@ -43,6 +43,10 @@ func main() {
 
   // Collect the response
 	resp, err := client.Do(req)
+  if resp.StatusCode != 200 {
+    log.Error("Failed to retrieve stats with error code %s", resp.Status)
+    os.Exit(1)
+  }
 	if err != nil {
 		log.Error("Failed to retrieve stats: %s", err.Error())
 		os.Exit(1)
