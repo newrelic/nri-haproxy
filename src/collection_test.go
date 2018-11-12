@@ -296,3 +296,27 @@ func Test_entityName_Error(t *testing.T) {
 	_, err = entityName(in2)
 	assert.Error(t, err)
 }
+
+func Test_collectInventoryOfType_Error(t *testing.T) {
+	i, _ := integration.New("test", "test")
+
+	from := map[string]string{
+		"pxname": "test",
+	}
+
+	collectInventoryOfType("listener", from, i)
+
+	assert.Equal(t, 0, len(i.Entities))
+}
+
+func Test_collectMetricsOfType_Error(t *testing.T) {
+	i, _ := integration.New("test", "test")
+
+	from := map[string]string{
+		"pxname": "test",
+	}
+
+	collectMetricsOfType("listener", HAProxyListenerStats, from, i)
+
+	assert.Equal(t, 0, len(i.Entities))
+}

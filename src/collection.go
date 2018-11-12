@@ -3,14 +3,14 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
+	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
-  "errors"
-  "fmt"
 
-	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
@@ -32,30 +32,30 @@ func createStatsRequest(username, password, url string) (*http.Request, error) {
 func processResponseToMap(body io.Reader) ([]map[string]string, error) {
 	bufReader := bufio.NewReader(body)
 
-  // Trim past the first space to remove the '# '
-  comment, err := bufReader.ReadBytes(' ') 
-  if err != nil {
-    return nil, err
-  }
-  
-  // Ensure the result is well-formed
-  if string( comment ) != "# " {
-    return nil, errors.New("cannot decode statistics: malformed response CSV")
-  }
+	// Trim past the first space to remove the '# '
+	comment, err := bufReader.ReadBytes(' ')
+	if err != nil {
+		return nil, err
+	}
 
-  // Read the metric names line
-	metricNames, err := bufReader.ReadBytes('\n') 
+	// Ensure the result is well-formed
+	if string(comment) != "# " {
+		return nil, errors.New("cannot decode statistics: malformed response CSV")
+	}
+
+	// Read the metric names line
+	metricNames, err := bufReader.ReadBytes('\n')
 	if err != nil {
 		return nil, err
 	}
 	metricNamesSplit := strings.Split(string(metricNames), ",")
-  metricNamesSplit = metricNamesSplit[0:len(metricNamesSplit)-1] // Remove the newline 
+	metricNamesSplit = metricNamesSplit[0 : len(metricNamesSplit)-1] // Remove the newline
 
-  // Create the CSV reader with strict entry length requirements
+	// Create the CSV reader with strict entry length requirements
 	r := csv.NewReader(bufReader)
 	r.FieldsPerRecord = len(metricNamesSplit) + 1
 
-  // For each line, parse results into a map from metric name to value
+	// For each line, parse results into a map from metric name to value
 	maps := make([]map[string]string, 0, 10)
 	for {
 		recordMap := make(map[string]string)
@@ -64,11 +64,11 @@ func processResponseToMap(body io.Reader) ([]map[string]string, error) {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-      return nil, fmt.Errorf("failed to parse CSV line: %s", err.Error())
+			return nil, fmt.Errorf("failed to parse CSV line: %s", err.Error())
 		}
 
-    // For each except the last entry (trailing comma)
-    for index, stat := range record[0:len(record)-1] {
+		// For each except the last entry (trailing comma)
+		for index, stat := range record[0 : len(record)-1] {
 			recordMap[metricNamesSplit[index]] = stat
 		}
 
@@ -90,7 +90,7 @@ func collectMetrics(stats map[string]string, i *integration.Integration) {
 		collectMetricsOfType("listener", HAProxyListenerStats, stats, i)
 	default:
 		log.Error("Invalid type %s", stats["type"])
-    return
+		return
 	}
 }
 
@@ -106,19 +106,19 @@ func collectInventory(stats map[string]string, i *integration.Integration) {
 		collectInventoryOfType("listener", stats, i)
 	default:
 		log.Error("Invalid type %s", stats["type"])
-    return
+		return
 	}
 }
 
 func collectInventoryOfType(entityType string, from map[string]string, i *integration.Integration) {
-  entityName, err:= entityName(from)
-  if err != nil {
-    log.Error("Failed to determine entity name: %s", err.Error())
-    return
-  }
-  e, err := i.Entity(entityName, entityType)
+	entityName, err := entityName(from)
 	if err != nil {
-		log.Error("Failed to create entity for %s: %s", from["pxname"], err.Error())
+		log.Error("Failed to determine entity name: %s", err.Error())
+		return
+	}
+	e, err := i.Entity(entityName, entityType)
+	if err != nil {
+		log.Error("Failed to create entity for %s: %s", entityName, err.Error())
 		return
 	}
 
@@ -136,22 +136,22 @@ func collectInventoryOfType(entityType string, from map[string]string, i *integr
 
 // TODO naming
 func collectMetricsOfType(entityType string, collect map[string]metricDefinition, from map[string]string, i *integration.Integration) {
-  entityName, err:= entityName(from)
-  if err != nil {
-    log.Error("Failed to determine entity name: %s", err.Error())
-    return
-  }
+	entityName, err := entityName(from)
+	if err != nil {
+		log.Error("Failed to determine entity name: %s", err.Error())
+		return
+	}
 
-  e, err := i.Entity(entityName, entityType)
+	e, err := i.Entity(entityName, entityType)
 	if err != nil {
 		log.Error("Failed to create entity for %s: %s", from["pxname"], err.Error())
 		return
 	}
 
 	ms := e.NewMetricSet(fmt.Sprintf("HAProxy%sSample", strings.Title(entityType)),
-    metric.Attribute{Key:"displayName", Value:e.Metadata.Name},
-    metric.Attribute{Key:"displayName", Value: entityType +":"+ e.Metadata.Name},
-  )
+		metric.Attribute{Key: "displayName", Value: e.Metadata.Name},
+		metric.Attribute{Key: "displayName", Value: entityType + ":" + e.Metadata.Name},
+	)
 
 	for metricName, metricValue := range from {
 		if metricValue == "" {
@@ -160,24 +160,24 @@ func collectMetricsOfType(entityType string, collect map[string]metricDefinition
 
 		def, ok := collect[metricName]
 		if ok {
-      err := ms.SetMetric(def.MetricName, metricValue, def.SourceType)
-      if err != nil {
-        log.Error("Failed to set metric %s for entity %s: %s", metricName, from["pxname"], err.Error())
-      }
+			err := ms.SetMetric(def.MetricName, metricValue, def.SourceType)
+			if err != nil {
+				log.Error("Failed to set metric %s for entity %s: %s", metricName, from["pxname"], err.Error())
+			}
 		}
 	}
 }
 
 func entityName(metrics map[string]string) (string, error) {
-  pxname, ok := metrics["pxname"]
-  if !ok {
-    return "", errors.New("proxy name (pxname) does not exist")
-  }
+	pxname, ok := metrics["pxname"]
+	if !ok {
+		return "", errors.New("proxy name (pxname) does not exist")
+	}
 
-  svname, ok := metrics["svname"]
-  if !ok {
-    return "", errors.New("service name (svname) does not exist")
-  }
+	svname, ok := metrics["svname"]
+	if !ok {
+		return "", errors.New("service name (svname) does not exist")
+	}
 
-  return fmt.Sprintf("%s:%s", pxname, svname), nil
+	return fmt.Sprintf("%s:%s", pxname, svname), nil
 }
