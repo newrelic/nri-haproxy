@@ -40,3 +40,4 @@ Session.vim
 debug
 
 Makefile-deploy.mk
+haproxy-config.yml
