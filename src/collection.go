@@ -49,10 +49,11 @@ func processResponseToMap(body io.Reader) ([]map[string]string, error) {
 		return nil, err
 	}
 	metricNamesSplit := strings.Split(string(metricNames), ",")
+  metricNamesSplit = metricNamesSplit[0:len(metricNamesSplit)-1] // Remove the newline 
 
   // Create the CSV reader with strict entry length requirements
 	r := csv.NewReader(bufReader)
-	r.FieldsPerRecord = len(metricNamesSplit)
+	r.FieldsPerRecord = len(metricNamesSplit) + 1
 
   // For each line, parse results into a map from metric name to value
 	maps := make([]map[string]string, 0, 10)
@@ -66,7 +67,8 @@ func processResponseToMap(body io.Reader) ([]map[string]string, error) {
       return nil, fmt.Errorf("failed to parse CSV line: %s", err.Error())
 		}
 
-		for index, stat := range record {
+    // For each except the last entry (trailing comma)
+    for index, stat := range record[0:len(record)-1] {
 			recordMap[metricNamesSplit[index]] = stat
 		}
 
@@ -109,7 +111,11 @@ func collectInventory(stats map[string]string, i *integration.Integration) {
 }
 
 func collectInventoryOfType(entityType string, from map[string]string, i *integration.Integration) {
-	e, err := i.Entity(from["pxname"], entityType)
+  entityName, err:= entityName(from)
+  if err != nil {
+    log.Error("Failed to determine entity name: %s", err.Error())
+  }
+  e, err := i.Entity(entityName, entityType)
 	if err != nil {
 		log.Error("Failed to create entity for %s: %s", from["pxname"], err.Error())
 		return
@@ -129,7 +135,12 @@ func collectInventoryOfType(entityType string, from map[string]string, i *integr
 
 // TODO naming
 func collectMetricsOfType(entityType string, collect map[string]metricDefinition, from map[string]string, i *integration.Integration) {
-  e, err := i.Entity(from["pxname"]+":"+from["svname"], entityType)
+  entityName, err:= entityName(from)
+  if err != nil {
+    log.Error("Failed to determine entity name: %s", err.Error())
+  }
+
+  e, err := i.Entity(entityName, entityType)
 	if err != nil {
 		log.Error("Failed to create entity for %s: %s", from["pxname"], err.Error())
 		return
@@ -153,4 +164,18 @@ func collectMetricsOfType(entityType string, collect map[string]metricDefinition
       }
 		}
 	}
+}
+
+func entityName(metrics map[string]string) (string, error) {
+  pxname, ok := metrics["pxname"]
+  if !ok {
+    return "", errors.New("proxy name (pxname) does not exist")
+  }
+
+  svname, ok := metrics["svname"]
+  if !ok {
+    return "", errors.New("service name (svname) does not exist")
+  }
+
+  return fmt.Sprintf("%s:%s", pxname, svname), nil
 }
