@@ -7,6 +7,7 @@ commands:
   all_data:
     command:
       - ./bin/nr-haproxy
+    prefix: config/haproxy
     interval: 15
   metrics:
     command:
