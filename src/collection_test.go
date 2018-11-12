@@ -8,6 +8,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test_createStatsRequest_Error(t *testing.T) {
+	_, err := createStatsRequest("user", "password", "!@#$%^&*()")
+	assert.Error(t, err)
+}
+
 func Test_addCSVtoURL(t *testing.T) {
 	testCases := []struct {
 		input  string
