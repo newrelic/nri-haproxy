@@ -114,6 +114,7 @@ func collectInventoryOfType(entityType string, from map[string]string, i *integr
   entityName, err:= entityName(from)
   if err != nil {
     log.Error("Failed to determine entity name: %s", err.Error())
+    return
   }
   e, err := i.Entity(entityName, entityType)
 	if err != nil {
@@ -138,6 +139,7 @@ func collectMetricsOfType(entityType string, collect map[string]metricDefinition
   entityName, err:= entityName(from)
   if err != nil {
     log.Error("Failed to determine entity name: %s", err.Error())
+    return
   }
 
   e, err := i.Entity(entityName, entityType)
