@@ -32,30 +32,32 @@ func main() {
 		os.Exit(1)
 	}
 
+	log.SetupLogging(args.Verbose)
+
 	client := &http.Client{}
 
-  // Create the http request
+	// Create the http request
 	req, err := createStatsRequest(args.Username, args.Password, addCSVtoURL(args.StatsURL))
 	if err != nil {
 		log.Error("Failed to create request: %s", err.Error())
 		os.Exit(1)
 	}
 
-  // Collect the response
+	// Collect the response
 	resp, err := client.Do(req)
-  if resp.StatusCode != 200 {
-    log.Error("Failed to retrieve stats with error code %s", resp.Status)
-    os.Exit(1)
-  }
+	if resp.StatusCode != 200 {
+		log.Error("Failed to retrieve stats with error code %s", resp.Status)
+		os.Exit(1)
+	}
 	if err != nil {
 		log.Error("Failed to retrieve stats: %s", err.Error())
 		os.Exit(1)
 	}
 
-  // Process CSV response into an array of metric:value maps
+	// Process CSV response into an array of metric:value maps
 	haproxyObjects, err := processResponseToMap(resp.Body)
 
-  // Collect metrics and inventory for each row of the result
+	// Collect metrics and inventory for each row of the result
 	for _, haproxyObject := range haproxyObjects {
 		if args.HasMetrics() {
 			collectMetrics(haproxyObject, haproxyIntegration)
