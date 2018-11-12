@@ -1,21 +1,21 @@
-name: com.newrelic.memcached
-description: Reports status and metrics for memcached service
+name: com.newrelic.haproxy
+description: Reports status and metrics for haproxy service
 protocol_version: 1
 os: linux
 
 commands:
   all_data:
     command:
-      - ./bin/nr-memcached
+      - ./bin/nr-haproxy
     interval: 15
   metrics:
     command:
-      - ./bin/nr-memcached
+      - ./bin/nr-haproxy
       - --metrics
     interval: 15
   inventory:
     command:
-      - ./bin/nr-memcached
+      - ./bin/nr-haproxy
       - --inventory
-    prefix: config/nr-memcached
+    prefix: config/haproxy
     interval: 15
