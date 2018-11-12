@@ -39,4 +39,4 @@ Session.vim
 .vscode
 debug
 
-Makefile-deployl.mk
+Makefile-deploy.mk
