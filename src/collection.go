@@ -110,8 +110,8 @@ func collectInventory(stats map[string]string, i *integration.Integration) {
 	}
 }
 
-func collectInventoryOfType(entityType string, from map[string]string, i *integration.Integration) {
-	entityName, err := entityName(from)
+func collectInventoryOfType(entityType string, stats map[string]string, i *integration.Integration) {
+	entityName, err := entityName(stats)
 	if err != nil {
 		log.Error("Failed to determine entity name: %s", err.Error())
 		return
@@ -122,7 +122,7 @@ func collectInventoryOfType(entityType string, from map[string]string, i *integr
 		return
 	}
 
-	for metricName, metricValue := range from {
+	for metricName, metricValue := range stats {
 		if metricValue == "" {
 			continue
 		}
@@ -134,9 +134,8 @@ func collectInventoryOfType(entityType string, from map[string]string, i *integr
 	}
 }
 
-// TODO naming
-func collectMetricsOfType(entityType string, collect map[string]metricDefinition, from map[string]string, i *integration.Integration) {
-	entityName, err := entityName(from)
+func collectMetricsOfType(entityType string, definitions map[string]metricDefinition, stats map[string]string, i *integration.Integration) {
+	entityName, err := entityName(stats)
 	if err != nil {
 		log.Error("Failed to determine entity name: %s", err.Error())
 		return
@@ -144,7 +143,7 @@ func collectMetricsOfType(entityType string, collect map[string]metricDefinition
 
 	e, err := i.Entity(entityName, entityType)
 	if err != nil {
-		log.Error("Failed to create entity for %s: %s", from["pxname"], err.Error())
+		log.Error("Failed to create entity for %s: %s", stats["pxname"], err.Error())
 		return
 	}
 
@@ -153,16 +152,16 @@ func collectMetricsOfType(entityType string, collect map[string]metricDefinition
 		metric.Attribute{Key: "displayName", Value: entityType + ":" + e.Metadata.Name},
 	)
 
-	for metricName, metricValue := range from {
+	for metricName, metricValue := range stats {
 		if metricValue == "" {
 			continue
 		}
 
-		def, ok := collect[metricName]
+		def, ok := definitions[metricName]
 		if ok {
 			err := ms.SetMetric(def.MetricName, metricValue, def.SourceType)
 			if err != nil {
-				log.Error("Failed to set metric %s for entity %s: %s", metricName, from["pxname"], err.Error())
+				log.Error("Failed to set metric %s for entity %s: %s", metricName, stats["pxname"], err.Error())
 			}
 		}
 	}
