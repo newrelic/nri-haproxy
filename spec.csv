@@ -1,19 +1,4 @@
 integration,metric_name,metric_type,metric_enabled,metric_description
-haproxy,listener.proxyName,Attribute,true,Proxy name
-haproxy,listener.serviceName,Attribute,true,Service name
-haproxy,listener.currentSessions,Gauge,true,Current sessions
-haproxy,listener.maxSessions,Gauge,true,Max sessions
-haproxy,listener.sessionsPerSecond,Rate,true,Sessions created per second
-haproxy,listener.bytesInPerSecond,Rate,true,Bytes received per second
-haproxy,listener.bytesOutPerSecond,Rate,true,Bytes sent per second
-haproxy,listener.requestsDenied.securityConcernsPerSecond,Rate,true,Requests denied because of security concerns per second
-haproxy,listener.responsesDenied.securityConcernsPerSecond,Rate,true,Responses denied because of security concerns per second
-haproxy,listener.requestErrorsPerSecond,Rate,true,Request errors per second
-haproxy,listener.status,Attribute,true,"Status. One of UP, DOWN, NOLB, MAINT, MAINT(via), MAINT(resolution)..."
-haproxy,listener.type,Gauge,true,"Type where 0=frontend, 1=backend, 2=server, 3=socket/listener"
-haproxy,listener.mode,Attribute,true,"Proxy mode. One of tcp, http, health, unknown"
-haproxy,listener.requestsDenied.tcpRequestConnectionRulesPerSecond,Rate,true,"Requests denied by ""tcp-request connection"" rules per second"
-haproxy,listener.requestsDenied.tcpRequestSessionRulesPerSecond,Rate,true,"Requests denied by ""tcp-request session"" rules per second"
 haproxy,frontend.proxyName,Attribute,true,Proxy Name
 haproxy,frontend.serviceName,Attribute,true,Service name
 haproxy,frontend.currentSessions,Gauge,true,Current Sessions

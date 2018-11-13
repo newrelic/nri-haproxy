@@ -11,25 +11,6 @@ type metricDefinition struct {
 	SourceType metric.SourceType
 }
 
-// HAProxyListenerStats holds the metric definitions for a listener
-var HAProxyListenerStats = map[string]metricDefinition{
-	"pxname": {MetricName: "listener.proxyName", SourceType: metric.ATTRIBUTE},
-	"svname": {MetricName: "listener.serviceName", SourceType: metric.ATTRIBUTE},
-	"scur":   {MetricName: "listener.currentSessions", SourceType: metric.GAUGE},
-	"smax":   {MetricName: "listener.maxSessions", SourceType: metric.GAUGE},
-	"stot":   {MetricName: "listener.sessionsPerSecond", SourceType: metric.RATE},
-	"bin":    {MetricName: "listener.bytesInPerSecond", SourceType: metric.RATE},
-	"bout":   {MetricName: "listener.bytesOutPerSecond", SourceType: metric.RATE},
-	"dreq":   {MetricName: "listener.requestsDenied.securityConcernsPerSecond", SourceType: metric.RATE},
-	"dresp":  {MetricName: "listener.responsesDenied.securityConcernsPerSecond", SourceType: metric.RATE},
-	"ereq":   {MetricName: "listener.requestErrorsPerSecond", SourceType: metric.RATE},
-	"status": {MetricName: "listener.status", SourceType: metric.ATTRIBUTE},
-	"type":   {MetricName: "listener.type", SourceType: metric.GAUGE},
-	"mode":   {MetricName: "listener.mode", SourceType: metric.ATTRIBUTE},
-	"dcon":   {MetricName: "listener.requestsDenied.tcpRequestConnectionRulesPerSecond", SourceType: metric.RATE},
-	"dses":   {MetricName: "listener.requestsDenied.tcpRequestSessionRulesPerSecond", SourceType: metric.RATE},
-}
-
 // HAProxyFrontendStats holds the metric definitions for a frontend
 var HAProxyFrontendStats = map[string]metricDefinition{
 	"pxname":        {MetricName: "frontend.proxyName", SourceType: metric.ATTRIBUTE},
