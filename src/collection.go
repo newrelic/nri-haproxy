@@ -131,7 +131,10 @@ func collectInventoryOfType(entityType string, stats map[string]string, i *integ
 
 		_, ok := HAProxyInventory[metricName]
 		if ok {
-			e.SetInventoryItem(metricName, "value", metricValue)
+			err := e.SetInventoryItem(metricName, "value", metricValue)
+			if err != nil {
+				log.Error("Failed to set inventory item for %s", metricName)
+			}
 		}
 	}
 }

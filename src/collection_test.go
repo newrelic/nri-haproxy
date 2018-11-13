@@ -93,15 +93,15 @@ func Test_collectMetricsOfType(t *testing.T) {
 
 	i, _ := integration.New("test", "test")
 
-	collectMetricsOfType("listener", HAProxyListenerStats, from, i)
+	collectMetricsOfType("frontend", HAProxyFrontendStats, from, i)
 
-	e, err := i.Entity("testpx:testsv", "listener")
+	e, err := i.Entity("testpx:testsv", "frontend")
 	if err != nil {
 		t.Error(err)
 	}
 
 	assert.Equal(t, 5, len(e.Metrics[0].Metrics))
-	assert.Equal(t, float64(3.0), e.Metrics[0].Metrics["listener.currentSessions"])
+	assert.Equal(t, float64(3.0), e.Metrics[0].Metrics["frontend.currentSessions"])
 	assert.Equal(t, nil, e.Metrics[0].Metrics["empty"])
 }
 
@@ -115,9 +115,9 @@ func Test_collectInventoryOfType(t *testing.T) {
 
 	i, _ := integration.New("test", "test")
 
-	collectInventoryOfType("listener", from, i)
+	collectInventoryOfType("frontend", from, i)
 
-	e, err := i.Entity("testpx:testsv", "listener")
+	e, err := i.Entity("testpx:testsv", "frontend")
 	if err != nil {
 		t.Error(err)
 	}
@@ -151,13 +151,6 @@ func Test_collectMetrics(t *testing.T) {
 		"scur":   "1",
 	}
 
-	listener := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
-		"type":   "3",
-		"scur":   "1",
-	}
-
 	invalid := map[string]string{
 		"pxname": "testpx",
 		"svname": "testsv",
@@ -168,7 +161,6 @@ func Test_collectMetrics(t *testing.T) {
 	collectMetrics(frontend, i)
 	collectMetrics(backend, i)
 	collectMetrics(server, i)
-	collectMetrics(listener, i)
 	collectMetrics(invalid, i)
 
 	frontendEntity, err := i.Entity("testpx:testsv", "frontend")
@@ -183,15 +175,10 @@ func Test_collectMetrics(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	listenerEntity, err := i.Entity("testpx:testsv", "listener")
-	if err != nil {
-		t.Error(err)
-	}
 
 	assert.Equal(t, float64(1.0), frontendEntity.Metrics[0].Metrics["frontend.currentSessions"])
 	assert.Equal(t, float64(1.0), backendEntity.Metrics[0].Metrics["backend.currentSessions"])
 	assert.Equal(t, float64(1.0), serverEntity.Metrics[0].Metrics["server.currentSessions"])
-	assert.Equal(t, float64(1.0), listenerEntity.Metrics[0].Metrics["listener.currentSessions"])
 }
 
 func Test_collectInventory(t *testing.T) {
@@ -250,15 +237,10 @@ func Test_collectInventory(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	listenerEntity, err := i.Entity("testpx:testsv", "listener")
-	if err != nil {
-		t.Error(err)
-	}
 
 	assert.Equal(t, "1", frontendEntity.Inventory.Items()["slim"]["value"])
 	assert.Equal(t, "1", backendEntity.Inventory.Items()["slim"]["value"])
 	assert.Equal(t, "1", serverEntity.Inventory.Items()["slim"]["value"])
-	assert.Equal(t, "1", listenerEntity.Inventory.Items()["slim"]["value"])
 }
 
 func Test_createStatsRequest(t *testing.T) {
@@ -304,7 +286,7 @@ func Test_collectInventoryOfType_Error(t *testing.T) {
 		"pxname": "test",
 	}
 
-	collectInventoryOfType("listener", from, i)
+	collectInventoryOfType("frontend", from, i)
 
 	assert.Equal(t, 0, len(i.Entities))
 }
@@ -316,7 +298,7 @@ func Test_collectMetricsOfType_Error(t *testing.T) {
 		"pxname": "test",
 	}
 
-	collectMetricsOfType("listener", HAProxyListenerStats, from, i)
+	collectMetricsOfType("frontend", HAProxyFrontendStats, from, i)
 
 	assert.Equal(t, 0, len(i.Entities))
 }
