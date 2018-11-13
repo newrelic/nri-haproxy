@@ -87,8 +87,8 @@ func collectMetrics(stats map[string]string, i *integration.Integration) {
 	case "2":
 		collectMetricsOfType("server", HAProxyServerStats, stats, i)
 	case "3":
-    log.Error("Cannot collect listener stats")
-    return
+		log.Error("Cannot collect listener stats")
+		return
 	default:
 		log.Error("Invalid type %s", stats["type"])
 		return
@@ -104,8 +104,8 @@ func collectInventory(stats map[string]string, i *integration.Integration) {
 	case "2":
 		collectInventoryOfType("server", stats, i)
 	case "3":
-    log.Error("Cannot collect listener stats")
-    return
+		log.Error("Cannot collect listener stats")
+		return
 	default:
 		log.Error("Invalid type %s", stats["type"])
 		return
