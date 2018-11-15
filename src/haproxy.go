@@ -34,6 +34,11 @@ func main() {
 
 	log.SetupLogging(args.Verbose)
 
+	if args.StatsURL == "" {
+		log.Error("Must supply a URL pointing to the HAProxy stats page")
+		os.Exit(1)
+	}
+
 	client := &http.Client{}
 
 	// Create the http request
@@ -45,12 +50,12 @@ func main() {
 
 	// Collect the response
 	resp, err := client.Do(req)
-	if resp.StatusCode != 200 {
-		log.Error("Failed to retrieve stats with error code %s", resp.Status)
-		os.Exit(1)
-	}
 	if err != nil {
 		log.Error("Failed to retrieve stats: %s", err.Error())
+		os.Exit(1)
+	}
+	if resp.StatusCode != 200 {
+		log.Error("Failed to retrieve stats with error code %s", resp.Status)
 		os.Exit(1)
 	}
 
@@ -60,7 +65,7 @@ func main() {
 	// Collect metrics and inventory for each row of the result
 	for _, haproxyObject := range haproxyObjects {
 		if args.HasMetrics() {
-			collectMetrics(haproxyObject, haproxyIntegration)
+			collectMetrics(haproxyObject, haproxyIntegration, args.StatsURL)
 		}
 
 		if args.HasInventory() {

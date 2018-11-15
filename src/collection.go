@@ -78,14 +78,14 @@ func processResponseToMap(body io.Reader) ([]map[string]string, error) {
 	return maps, nil
 }
 
-func collectMetrics(stats map[string]string, i *integration.Integration) {
+func collectMetrics(stats map[string]string, i *integration.Integration, url string) {
 	switch stats["type"] {
 	case "0":
-		collectMetricsOfType("frontend", HAProxyFrontendStats, stats, i)
+		collectMetricsOfType("frontend", HAProxyFrontendStats, stats, i, url)
 	case "1":
-		collectMetricsOfType("backend", HAProxyBackendStats, stats, i)
+		collectMetricsOfType("backend", HAProxyBackendStats, stats, i, url)
 	case "2":
-		collectMetricsOfType("server", HAProxyServerStats, stats, i)
+		collectMetricsOfType("server", HAProxyServerStats, stats, i, url)
 	case "3":
 		log.Error("Cannot collect listener stats")
 		return
@@ -139,7 +139,7 @@ func collectInventoryOfType(entityType string, stats map[string]string, i *integ
 	}
 }
 
-func collectMetricsOfType(entityType string, definitions map[string]metricDefinition, stats map[string]string, i *integration.Integration) {
+func collectMetricsOfType(entityType string, definitions map[string]metricDefinition, stats map[string]string, i *integration.Integration, url string) {
 	entityName, err := entityName(stats)
 	if err != nil {
 		log.Error("Failed to determine entity name: %s", err.Error())
@@ -154,7 +154,8 @@ func collectMetricsOfType(entityType string, definitions map[string]metricDefini
 
 	ms := e.NewMetricSet(fmt.Sprintf("HAProxy%sSample", strings.Title(entityType)),
 		metric.Attribute{Key: "displayName", Value: e.Metadata.Name},
-		metric.Attribute{Key: "displayName", Value: entityType + ":" + e.Metadata.Name},
+		metric.Attribute{Key: "entityName", Value: entityType + ":" + e.Metadata.Name},
+		metric.Attribute{Key: "statsURL", Value: url},
 	)
 
 	for metricName, metricValue := range stats {
