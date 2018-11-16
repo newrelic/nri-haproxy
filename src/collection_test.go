@@ -93,14 +93,14 @@ func Test_collectMetricsOfType(t *testing.T) {
 
 	i, _ := integration.New("test", "test")
 
-	collectMetricsOfType("frontend", HAProxyFrontendStats, from, i)
+	collectMetricsOfType("frontend", HAProxyFrontendStats, from, i, "testhost")
 
 	e, err := i.Entity("testpx:testsv", "frontend")
 	if err != nil {
 		t.Error(err)
 	}
 
-	assert.Equal(t, 5, len(e.Metrics[0].Metrics))
+	assert.Equal(t, 7, len(e.Metrics[0].Metrics))
 	assert.Equal(t, float64(3.0), e.Metrics[0].Metrics["frontend.currentSessions"])
 	assert.Equal(t, nil, e.Metrics[0].Metrics["empty"])
 }
@@ -158,10 +158,10 @@ func Test_collectMetrics(t *testing.T) {
 		"scur":   "1",
 	}
 
-	collectMetrics(frontend, i)
-	collectMetrics(backend, i)
-	collectMetrics(server, i)
-	collectMetrics(invalid, i)
+	collectMetrics(frontend, i, "testhost")
+	collectMetrics(backend, i, "testhost")
+	collectMetrics(server, i, "testhost")
+	collectMetrics(invalid, i, "testhost")
 
 	frontendEntity, err := i.Entity("testpx:testsv", "frontend")
 	if err != nil {
@@ -298,7 +298,7 @@ func Test_collectMetricsOfType_Error(t *testing.T) {
 		"pxname": "test",
 	}
 
-	collectMetricsOfType("frontend", HAProxyFrontendStats, from, i)
+	collectMetricsOfType("frontend", HAProxyFrontendStats, from, i, "testhost")
 
 	assert.Equal(t, 0, len(i.Entities))
 }
