@@ -1,0 +1,75 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "dvabztWVQX8f6oMLRyv4dLH+TGY=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "f35b8ab0b5a2cef36673838d662e249dd9c94686",
+			"revisionTime": "2018-05-06T18:05:49Z"
+		},
+		{
+			"checksumSHA1": "WUtPqOvTzvtf4U6AYPwHpEkr3Do=",
+			"path": "github.com/newrelic/infra-integrations-sdk/args",
+			"revision": "87191ef2538927d23bac6ffccc8ae395eb361901",
+			"revisionTime": "2018-10-02T07:53:39Z"
+		},
+		{
+			"checksumSHA1": "KaZLSd/JUZz/mqfW3jFd1j2QdWA=",
+			"path": "github.com/newrelic/infra-integrations-sdk/data/event",
+			"revision": "87191ef2538927d23bac6ffccc8ae395eb361901",
+			"revisionTime": "2018-10-02T07:53:39Z"
+		},
+		{
+			"checksumSHA1": "EOoxXGqFDPkCvj7wec2S5kCXY2I=",
+			"path": "github.com/newrelic/infra-integrations-sdk/data/inventory",
+			"revision": "87191ef2538927d23bac6ffccc8ae395eb361901",
+			"revisionTime": "2018-10-02T07:53:39Z"
+		},
+		{
+			"checksumSHA1": "39SDqHpLpE9J1nrIwYI+8ukzXJs=",
+			"path": "github.com/newrelic/infra-integrations-sdk/data/metric",
+			"revision": "87191ef2538927d23bac6ffccc8ae395eb361901",
+			"revisionTime": "2018-10-02T07:53:39Z"
+		},
+		{
+			"checksumSHA1": "SmqfH71xpQsY3JjNHUNUVCq7pCA=",
+			"path": "github.com/newrelic/infra-integrations-sdk/integration",
+			"revision": "87191ef2538927d23bac6ffccc8ae395eb361901",
+			"revisionTime": "2018-10-02T07:53:39Z"
+		},
+		{
+			"checksumSHA1": "6/DhD+/LhC/k3NaLgkpd6iE8b5E=",
+			"path": "github.com/newrelic/infra-integrations-sdk/log",
+			"revision": "87191ef2538927d23bac6ffccc8ae395eb361901",
+			"revisionTime": "2018-10-02T07:53:39Z"
+		},
+		{
+			"checksumSHA1": "BsHp62Etporko0d+4GpVxrP2qtw=",
+			"path": "github.com/newrelic/infra-integrations-sdk/persist",
+			"revision": "87191ef2538927d23bac6ffccc8ae395eb361901",
+			"revisionTime": "2018-10-02T07:53:39Z"
+		},
+		{
+			"checksumSHA1": "18YrywDvb67HU8xYF5vqKMgelx0=",
+			"path": "github.com/pkg/errors",
+			"revision": "c059e472caf75dbe73903f6521a20abac245b17f",
+			"revisionTime": "2018-09-11T06:21:13Z"
+		},
+		{
+			"checksumSHA1": "LuFv4/jlrmFNnDb/5SCSEPAM9vU=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib",
+			"path": "github.com/pmezard/go-difflib/difflib",
+			"revision": "f35b8ab0b5a2cef36673838d662e249dd9c94686",
+			"revisionTime": "2018-05-06T18:05:49Z"
+		},
+		{
+			"checksumSHA1": "c6pbpF7eowwO59phRTpF8cQ80Z0=",
+			"path": "github.com/stretchr/testify/assert",
+			"revision": "f35b8ab0b5a2cef36673838d662e249dd9c94686",
+			"revisionTime": "2018-05-06T18:05:49Z"
+		}
+	],
+	"rootPath": "github.com/newrelic/nri-haproxy"
+}
