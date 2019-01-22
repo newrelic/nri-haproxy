@@ -1,0 +1,4 @@
+entity type,inventory source,inventory path
+frontend,config/haproxy,*
+backend,config/haproxy,*
+server,config/haproxy,*
