@@ -1,6 +1,6 @@
 name: com.newrelic.haproxy
 description: Reports status and metrics for haproxy service
-protocol_version: 1
+protocol_version: 2
 os: linux
 
 commands:
