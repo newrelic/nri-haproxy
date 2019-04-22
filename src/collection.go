@@ -119,7 +119,7 @@ func collectInventoryOfType(entityType string, stats map[string]string, i *integ
 		return
 	}
 
-  entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName }
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
 	e, err := i.EntityReportedVia(url, entityName, entityType, entityIDAttrs)
 	if err != nil {
 		log.Error("Failed to create entity for %s: %s", entityName, err.Error())
@@ -148,7 +148,7 @@ func collectMetricsOfType(entityType string, definitions map[string]metricDefini
 		return
 	}
 
-  entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName }
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
 	e, err := i.EntityReportedVia(url, entityName, entityType, entityIDAttrs)
 	if err != nil {
 		log.Error("Failed to create entity for %s: %s", stats["pxname"], err.Error())

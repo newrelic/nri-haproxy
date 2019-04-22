@@ -95,7 +95,7 @@ func Test_collectMetricsOfType(t *testing.T) {
 
 	collectMetricsOfType("ha-frontend", HAProxyFrontendStats, from, i, "testhost")
 
-  e, err := i.Entity("testpx/testsv", "ha-frontend")
+	e, err := i.Entity("testpx/testsv", "ha-frontend")
 	if err != nil {
 		t.Error(err)
 	}
