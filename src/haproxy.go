@@ -40,6 +40,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	if args.ClusterName == "" {
+		log.Error("Must supply a cluster name to identify this HAProxy instance")
+		os.Exit(1)
+	}
+
 	client := &http.Client{}
 
 	// Create the http request
