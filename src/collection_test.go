@@ -95,7 +95,8 @@ func Test_collectMetricsOfType(t *testing.T) {
 
 	collectMetricsOfType("ha-frontend", HAProxyFrontendStats, from, i, "testhost")
 
-	e, err := i.Entity("testpx/testsv", "ha-frontend")
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	e, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
@@ -117,7 +118,8 @@ func Test_collectInventoryOfType(t *testing.T) {
 
 	collectInventoryOfType("ha-frontend", from, i, "testClusterName")
 
-	e, err := i.Entity("testpx/testsv", "ha-frontend")
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	e, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
@@ -163,15 +165,16 @@ func Test_collectMetrics(t *testing.T) {
 	collectMetrics(server, i, "testhost")
 	collectMetrics(invalid, i, "testhost")
 
-	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend")
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
-	backendEntity, err := i.Entity("testpx/testsv", "ha-backend")
+	backendEntity, err := i.Entity("testpx/testsv", "ha-backend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
-	serverEntity, err := i.Entity("testpx/testsv", "ha-server")
+	serverEntity, err := i.Entity("testpx/testsv", "ha-server", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
@@ -225,15 +228,16 @@ func Test_collectInventory(t *testing.T) {
 	collectInventory(listener, i, "testClusterName")
 	collectInventory(invalid, i, "testClusterName")
 
-	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend")
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
-	backendEntity, err := i.Entity("testpx/testsv", "ha-backend")
+	backendEntity, err := i.Entity("testpx/testsv", "ha-backend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
-	serverEntity, err := i.Entity("testpx/testsv", "ha-server")
+	serverEntity, err := i.Entity("testpx/testsv", "ha-server", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
