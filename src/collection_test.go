@@ -93,9 +93,10 @@ func Test_collectMetricsOfType(t *testing.T) {
 
 	i, _ := integration.New("test", "test")
 
-	collectMetricsOfType("frontend", HAProxyFrontendStats, from, i, "testhost")
+	collectMetricsOfType("ha-frontend", HAProxyFrontendStats, from, i, "testhost")
 
-	e, err := i.Entity("testpx:testsv", "frontend")
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	e, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
@@ -115,9 +116,10 @@ func Test_collectInventoryOfType(t *testing.T) {
 
 	i, _ := integration.New("test", "test")
 
-	collectInventoryOfType("frontend", from, i)
+	collectInventoryOfType("ha-frontend", from, i, "testClusterName")
 
-	e, err := i.Entity("testpx:testsv", "frontend")
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	e, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
@@ -163,15 +165,16 @@ func Test_collectMetrics(t *testing.T) {
 	collectMetrics(server, i, "testhost")
 	collectMetrics(invalid, i, "testhost")
 
-	frontendEntity, err := i.Entity("testpx:testsv", "frontend")
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
-	backendEntity, err := i.Entity("testpx:testsv", "backend")
+	backendEntity, err := i.Entity("testpx/testsv", "ha-backend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
-	serverEntity, err := i.Entity("testpx:testsv", "server")
+	serverEntity, err := i.Entity("testpx/testsv", "ha-server", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
@@ -219,21 +222,22 @@ func Test_collectInventory(t *testing.T) {
 		"slim":   "1",
 	}
 
-	collectInventory(frontend, i)
-	collectInventory(backend, i)
-	collectInventory(server, i)
-	collectInventory(listener, i)
-	collectInventory(invalid, i)
+	collectInventory(frontend, i, "testClusterName")
+	collectInventory(backend, i, "testClusterName")
+	collectInventory(server, i, "testClusterName")
+	collectInventory(listener, i, "testClusterName")
+	collectInventory(invalid, i, "testClusterName")
 
-	frontendEntity, err := i.Entity("testpx:testsv", "frontend")
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
-	backendEntity, err := i.Entity("testpx:testsv", "backend")
+	backendEntity, err := i.Entity("testpx/testsv", "ha-backend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
-	serverEntity, err := i.Entity("testpx:testsv", "server")
+	serverEntity, err := i.Entity("testpx/testsv", "ha-server", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
@@ -260,7 +264,7 @@ func Test_entityName(t *testing.T) {
 
 	name, err := entityName(in)
 	assert.Nil(t, err)
-	assert.Equal(t, "test1:test2", name)
+	assert.Equal(t, "test1/test2", name)
 }
 
 func Test_entityName_Error(t *testing.T) {
@@ -286,7 +290,7 @@ func Test_collectInventoryOfType_Error(t *testing.T) {
 		"pxname": "test",
 	}
 
-	collectInventoryOfType("frontend", from, i)
+	collectInventoryOfType("frontend", from, i, "testClusterName")
 
 	assert.Equal(t, 0, len(i.Entities))
 }

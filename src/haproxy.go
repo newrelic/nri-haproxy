@@ -11,7 +11,7 @@ import (
 
 const (
 	integrationName    = "com.newrelic.haproxy"
-	integrationVersion = "1.0.0"
+	integrationVersion = "2.0.0"
 )
 
 var (
@@ -20,9 +20,10 @@ var (
 
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
-	Username string `default:"" help:"The HAProxy basic auth username."`
-	Password string `default:"" help:"The HAProxy basic auth password."`
-	StatsURL string `default:"" help:"The URL where HAProxy stats are available."`
+	Username    string `default:"" help:"The HAProxy basic auth username."`
+	Password    string `default:"" help:"The HAProxy basic auth password."`
+	StatsURL    string `default:"" help:"The URL where HAProxy stats are available."`
+	ClusterName string `default:"" help:"The URL where HAProxy stats are available."`
 }
 
 func main() {
@@ -36,6 +37,11 @@ func main() {
 
 	if args.StatsURL == "" {
 		log.Error("Must supply a URL pointing to the HAProxy stats page")
+		os.Exit(1)
+	}
+
+	if args.ClusterName == "" {
+		log.Error("Must supply a cluster name to identify this HAProxy instance")
 		os.Exit(1)
 	}
 
@@ -69,7 +75,7 @@ func main() {
 		}
 
 		if args.HasInventory() {
-			collectInventory(haproxyObject, haproxyIntegration)
+			collectInventory(haproxyObject, haproxyIntegration, args.StatsURL)
 		}
 	}
 
