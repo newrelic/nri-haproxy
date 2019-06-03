@@ -3,66 +3,66 @@ haproxy,frontend.proxyName,Attribute,true,Proxy Name
 haproxy,frontend.serviceName,Attribute,true,Service name
 haproxy,frontend.currentSessions,Gauge,true,Current Sessions
 haproxy,frontend.maxSessions,Gauge,true,Maximum number of sessions
-haproxy,frontend.sessionsPerSecond,Rate,true,Sessions created per second
-haproxy,frontend.bytesInPerSecond,Rate,true,Bytes received per second
-haproxy,frontend.bytesOutPerSecond,Rate,true,Bytes sent per second
-haproxy,frontend.requestsDenied.securityConcernsPerSecond,Rate,true,Requests denied because of security concerns per second
-haproxy,frontend.responsesDenied.securityConcernsPerSecond,Rate,true,Responses denied because of security concerns per second
+haproxy,frontend.sessionsPerSecond,PRate,true,Sessions created per second
+haproxy,frontend.bytesInPerSecond,PRate,true,Bytes received per second
+haproxy,frontend.bytesOutPerSecond,PRate,true,Bytes sent per second
+haproxy,frontend.requestsDenied.securityConcernsPerSecond,PRate,true,Requests denied because of security concerns per second
+haproxy,frontend.responsesDenied.securityConcernsPerSecond,PRate,true,Responses denied because of security concerns per second
 haproxy,frontend.requestErrors,Gauge,true,Request errors per second
 haproxy,frontend.status,Attribute,true,"Status. One of UP, DOWN, NOLB, MAINT, MAINT(via), MAINT(resolution)..."
 haproxy,frontend.type,Attribute,true,"Type where 0=frontend, 1=backend, 2=server, 3=socket/listener"
 haproxy,frontend.maxSessionsPerSecond,Gauge,true,Maximum number of new sessions per second
-haproxy,frontend.http100ResponsesPerSecond,Rate,true,HTTP responses with 1xx code per second
-haproxy,frontend.http200ResponsesPerSecond,Rate,true,HTTP responses with 2xx code per second
-haproxy,frontend.http300ResponsesPerSecond,Rate,true,HTTP responses with 3xx code per second
-haproxy,frontend.http400ResponsesPerSecond,Rate,true,HTTP responses with 4xx code per second
-haproxy,frontend.http500ResponsesPerSecond,Rate,true,HTTP responses with 5xx code per second
-haproxy,frontend.httpOtherResponsesPerSecond,Rate,true,HTTP responses with other codes (protocol error)
+haproxy,frontend.http100ResponsesPerSecond,PRate,true,HTTP responses with 1xx code per second
+haproxy,frontend.http200ResponsesPerSecond,PRate,true,HTTP responses with 2xx code per second
+haproxy,frontend.http300ResponsesPerSecond,PRate,true,HTTP responses with 3xx code per second
+haproxy,frontend.http400ResponsesPerSecond,PRate,true,HTTP responses with 4xx code per second
+haproxy,frontend.http500ResponsesPerSecond,PRate,true,HTTP responses with 5xx code per second
+haproxy,frontend.httpOtherResponsesPerSecond,PRate,true,HTTP responses with other codes (protocol error)
 haproxy,frontend.httpRequests.maxPerSecond,Gauge,true,Max number of HTTP requests per second observed
-haproxy,frontend.httpRequestsPerSecond,Rate,true,HTTP requests per second
+haproxy,frontend.httpRequestsPerSecond,PRate,true,HTTP requests per second
 haproxy,frontend.mode,Attribute,true,"Proxy mode. One of tcp, http, health, unknown"
 haproxy,frontend.maxConnectionsPerSecond,Gauge,true,Maximum number of connections
-haproxy,frontend.connectionsPerSecond,Rate,true,Connections per second
-haproxy,frontend.interceptedRequestsPerSecond,Rate,true,Intercepted requests per second
-haproxy,frontend.requestsDenied.tcpRequestConnectionRulesPerSecond,Rate,true,"Requests denied by ""tcp-request connection"" rules per second"
-haproxy,frontend.requestsDenied.tcpRequestSessionRulesPerSecond,Rate,true,"Requests denied by ""tcp-request session"" rules per second"
+haproxy,frontend.connectionsPerSecond,PRate,true,Connections per second
+haproxy,frontend.interceptedRequestsPerSecond,PRate,true,Intercepted requests per second
+haproxy,frontend.requestsDenied.tcpRequestConnectionRulesPerSecond,PRate,true,"Requests denied by ""tcp-request connection"" rules per second"
+haproxy,frontend.requestsDenied.tcpRequestSessionRulesPerSecond,PRate,true,"Requests denied by ""tcp-request session"" rules per second"
 haproxy,backend.proxyName,Attribute,true,Proxy name
 haproxy,backend.currentQueuedRequestsWithoutServer,Gauge,true,Current queued requests without a server assigned
 haproxy,backend.maxQueuedRequestsWithoutServer,Gauge,true,Maximum queued requests without a server assigned
 haproxy,backend.currentSessions,Gauge,true,Current sessions
 haproxy,backend.maxSessions,Gauge,true,Maximum number of sessions
-haproxy,backend.sessionsPerSecond,Rate,true,Sessions created per second
-haproxy,backend.bytesInPerSecond,Rate,true,Bytes received per second
-haproxy,backend.bytesOutPerSecond,Rate,true,Bytes sent per second
-haproxy,backend.requestsDenied.securityConcernPerSecond,Rate,true,"Requests denied by ""tcp-request connection"" rules per second"
-haproxy,backend.responsesDenied.securityConcernPerSecond,Rate,true,"Requests denied by ""tcp-request session"" rules per second"
-haproxy,backend.connectingRequestErrorsPerSecond,Rate,true,Number of requests that encountered an error trying to connect to a backend server per second
-haproxy,backend.responseErrorsPerSecond,Rate,true,Response errors per second
-haproxy,backend.connectionRetriesPerSecond,Rate,true,Number of times a connection to a server was retried per second
-haproxy,backend.requestRedispatchPerSecond,Rate,true,Number of times a request was redispatched to another server per second
+haproxy,backend.sessionsPerSecond,PRate,true,Sessions created per second
+haproxy,backend.bytesInPerSecond,PRate,true,Bytes received per second
+haproxy,backend.bytesOutPerSecond,PRate,true,Bytes sent per second
+haproxy,backend.requestsDenied.securityConcernPerSecond,PRate,true,"Requests denied by ""tcp-request connection"" rules per second"
+haproxy,backend.responsesDenied.securityConcernPerSecond,PRate,true,"Requests denied by ""tcp-request session"" rules per second"
+haproxy,backend.connectingRequestErrorsPerSecond,PRate,true,Number of requests that encountered an error trying to connect to a backend server per second
+haproxy,backend.responseErrorsPerSecond,PRate,true,Response errors per second
+haproxy,backend.connectionRetriesPerSecond,PRate,true,Number of times a connection to a server was retried per second
+haproxy,backend.requestRedispatchPerSecond,PRate,true,Number of times a request was redispatched to another server per second
 haproxy,backend.status,Attribute,true,"Status. One of UP, DOWN, NOLB, MAINT, MAINT(via), MAINT(resolution)..."
 haproxy,backend.totalWeight,Gauge,true,Total weight
 haproxy,backend.activeServers,Gauge,true,Number of active servers
 haproxy,backend.backupServers,Gauge,true,Number of backup servers
-haproxy,backend.upToDownTransitionsPerSecond,Rate,true,Number of UP->DOWN transitions per second
+haproxy,backend.upToDownTransitionsPerSecond,PRate,true,Number of UP->DOWN transitions per second
 haproxy,backend.timeSinceLastUpDownTransitionInSeconds,Gauge,true,Number of seconds since the last UP<->DOWN transition
 haproxy,backend.downtimeInSeconds,Gauge,true,Total downtime in seconds
-haproxy,backend.serverSelectedPerSecond,Rate,true,"Number of times a server was selected per second, either for new sessions, or when re-dispatching"
+haproxy,backend.serverSelectedPerSecond,PRate,true,"Number of times a server was selected per second, either for new sessions, or when re-dispatching"
 haproxy,backend.type,Attribute,true,"Type where 0=frontend, 1=backend, 2=server, 3=socket/listener"
-haproxy,backend.maxSessionsPerSecond,Rate,true,Maximum number of new sessions per second
-haproxy,backend.http100ResponsesPerSecond,Rate,true,HTTP responses with 1xx code per second
-haproxy,backend.http200ResponsesPerSecond,Rate,true,HTTP responses with 2xx code per second
-haproxy,backend.http300ResponsesPerSecond,Rate,true,HTTP responses with 3xx code per second
-haproxy,backend.http400ResponsesPerSecond,Rate,true,HTTP responses with 4xx code per second
-haproxy,backend.http500ResponsesPerSecond,Rate,true,HTTP responses with 5xx code per second
-haproxy,backend.httpOtherResponsesPerSecond,Rate,true,HTTP responses with other codes (protocol error) per second
-haproxy,backend.httpRequestsPerSecond,Rate,true,HTTP requests per second
-haproxy,backend.dataTransfersAbortedByClientPerSecond,Rate,true,Number of data transfers aborted by the client per second
-haproxy,backend.dataTransfersAbortedByServerPerSecond,Rate,true,Number of data transfers aborted by the server per second
-haproxy,backend.httpResponseBytesFedToCompressorPerSecond,Rate,true,Number of HTTP response bytes fed to the compressor per second
-haproxy,backend.httpResponseBytesEmittedByCompressorPerSecond,Rate,true,Number of HTTP response bytes emitted by the compressor per second
-haproxy,backend.bytesThatBypassedCompressorPerSecond,Rate,true,Number of bytes that bypassed the HTTP compressor per second
-haproxy,backend.httpResponsesCompressedPerSecond,Rate,true,Number of HTTP responses that were compressed per second
+haproxy,backend.maxSessionsPerSecond,PRate,true,Maximum number of new sessions per second
+haproxy,backend.http100ResponsesPerSecond,PRate,true,HTTP responses with 1xx code per second
+haproxy,backend.http200ResponsesPerSecond,PRate,true,HTTP responses with 2xx code per second
+haproxy,backend.http300ResponsesPerSecond,PRate,true,HTTP responses with 3xx code per second
+haproxy,backend.http400ResponsesPerSecond,PRate,true,HTTP responses with 4xx code per second
+haproxy,backend.http500ResponsesPerSecond,PRate,true,HTTP responses with 5xx code per second
+haproxy,backend.httpOtherResponsesPerSecond,PRate,true,HTTP responses with other codes (protocol error) per second
+haproxy,backend.httpRequestsPerSecond,PRate,true,HTTP requests per second
+haproxy,backend.dataTransfersAbortedByClientPerSecond,PRate,true,Number of data transfers aborted by the client per second
+haproxy,backend.dataTransfersAbortedByServerPerSecond,PRate,true,Number of data transfers aborted by the server per second
+haproxy,backend.httpResponseBytesFedToCompressorPerSecond,PRate,true,Number of HTTP response bytes fed to the compressor per second
+haproxy,backend.httpResponseBytesEmittedByCompressorPerSecond,PRate,true,Number of HTTP response bytes emitted by the compressor per second
+haproxy,backend.bytesThatBypassedCompressorPerSecond,PRate,true,Number of bytes that bypassed the HTTP compressor per second
+haproxy,backend.httpResponsesCompressedPerSecond,PRate,true,Number of HTTP responses that were compressed per second
 haproxy,backend.timeSinceLastSessionAssignedInSeconds,Gauge,true,Number of seconds since last session assigned to backend
 haproxy,backend.averageQueueTimeInSeconds,Gauge,true,Average queue time in milliseconds over the 1024 last requests
 haproxy,backend.averageConnectTimeInSeconds,Gauge,true,Average connect time in milliseconds over the 1024 last requests
@@ -70,47 +70,47 @@ haproxy,backend.averageResponseTimeInSeconds,Gauge,true,Average response time in
 haproxy,backend.averageTotalSessionTimeInSeconds,Gauge,true,Average total session time in milliseconds over the 1024 last requests
 haproxy,backend.cookieName,Attribute,true,Cookie name
 haproxy,backend.mode,Attribute,true,"Proxy mode. One of tcp, http, health, unknown"
-haproxy,backend.interceptedRequestsPerSecond,Rate,true,Intercepted requests per second
+haproxy,backend.interceptedRequestsPerSecond,PRate,true,Intercepted requests per second
 haproxy,server.proxyName,Attribute,true,Proxy name
 haproxy,server.serviceName,Attribute,true,Service name
 haproxy,server.queuedRequests,Gauge,true,Current queued requests
 haproxy,server.maximumQueuedRequests,Gauge,true,Maximum queued requests
 haproxy,server.currentSessions,Gauge,true,Current sessions
 haproxy,server.maxSessions,Gauge,true,Maximum sessions
-haproxy,server.sessionsPerSecond,Rate,true,Sessions per second
-haproxy,server.bytesInPerSecond,Rate,true,Bytes received per second
-haproxy,server.bytesOutPerSecond,Rate,true,Bytes sent per second
-haproxy,server.requestsDenied.securityConcernPerSecond,Rate,true,Requests denied because of security concerns per second
-haproxy,server.responsesDenied.securityConcernPerSecond,Rate,true,Responses denied because of security concerns per second
-haproxy,server.connectingToBackendRequestErrorsPerSecond,Rate,true,Number of requests that encountered an error trying to connect to a backend server per second
-haproxy,server.responseErrorsPerSecond,Rate,true,Response errors per second
-haproxy,server.connectionRetriesPerSecond,Rate,true,Number of times a connection to a server was retried per second
-haproxy,server.requestRedispatchPerSecond,Rate,true,Number of times a request was redispatched to another server per second
+haproxy,server.sessionsPerSecond,PRate,true,Sessions per second
+haproxy,server.bytesInPerSecond,PRate,true,Bytes received per second
+haproxy,server.bytesOutPerSecond,PRate,true,Bytes sent per second
+haproxy,server.requestsDenied.securityConcernPerSecond,PRate,true,Requests denied because of security concerns per second
+haproxy,server.responsesDenied.securityConcernPerSecond,PRate,true,Responses denied because of security concerns per second
+haproxy,server.connectingToBackendRequestErrorsPerSecond,PRate,true,Number of requests that encountered an error trying to connect to a backend server per second
+haproxy,server.responseErrorsPerSecond,PRate,true,Response errors per second
+haproxy,server.connectionRetriesPerSecond,PRate,true,Number of times a connection to a server was retried per second
+haproxy,server.requestRedispatchPerSecond,PRate,true,Number of times a request was redispatched to another server per second
 haproxy,server.status,Attribute,true,"Status. One of UP, DOWN, NOLB, MAINT, MAINT(via), MAINT(resolution)..."
 haproxy,server.serverWeight,Attribute,true,Server weight
 haproxy,server.isActive,Gauge,true,"Whether the server is active. 0=Inactive, 1=Active"
 haproxy,server.isBackup,Gauge,true,"Whether the server is a backup. 0=Not Backup, 1=Bakup"
-haproxy,server.failedChecksPerSecond,Rate,true,Number of failed checks per second
-haproxy,server.upToDownTransitionsPerSecond,Rate,true,Number of UP->DOWN transitions per second
+haproxy,server.failedChecksPerSecond,PRate,true,Number of failed checks per second
+haproxy,server.upToDownTransitionsPerSecond,PRate,true,Number of UP->DOWN transitions per second
 haproxy,server.timeSinceLastUpDownTransitionInSeconds,Gauge,true,Number of seconds since the last UP<->DOWN transition
 haproxy,server.downtimeInSeconds,Gauge,true,Total downtime in seconds
 haproxy,server.throttlePercentage,Gauge,true,"Throttle percentage for the server, when slowstart is active. Or no value if not in slowstart"
-haproxy,server.serverSelectedPerSecond,Rate,true,"Number of times a server was selected per second, either for new sessions, or when re-dispatching"
+haproxy,server.serverSelectedPerSecond,PRate,true,"Number of times a server was selected per second, either for new sessions, or when re-dispatching"
 haproxy,server.serverID,Attribute,true,Server ID
 haproxy,server.type,Attribute,true,"Type where 0=frontend, 1=backend, 2=server, 3=socket/listener"
 haproxy,server.maxSessionsPerSecond,Gauge,true,Max sessions per second
 haproxy,server.healthCheckStatus,Attribute,true,Health check status.
 haproxy,server.layerCode,Attribute,true,"Layer 5-7 code, if available"
 haproxy,server.healthCheckDurationInMilliseconds,Gauge,true,Time it took to finish the last health check in milliseconds
-haproxy,server.http100ResponsesPerSecond,Rate,true,HTTP responses with 1xx code per second
-haproxy,server.http200ResponsesPerSecond,Rate,true,HTTP responses with 2xx code per second
-haproxy,server.http300ResponsesPerSecond,Rate,true,HTTP responses with 3xx code per second
-haproxy,server.http400ResponsesPerSecond,Rate,true,HTTP responses with 4xx code per second
-haproxy,server.http500ResponsesPerSecond,Rate,true,HTTP responses with 5xx code per second
-haproxy,server.httpOtherResponsesPerSecond,Rate,true,HTTP responses with other codes (protocol error)
+haproxy,server.http100ResponsesPerSecond,PRate,true,HTTP responses with 1xx code per second
+haproxy,server.http200ResponsesPerSecond,PRate,true,HTTP responses with 2xx code per second
+haproxy,server.http300ResponsesPerSecond,PRate,true,HTTP responses with 3xx code per second
+haproxy,server.http400ResponsesPerSecond,PRate,true,HTTP responses with 4xx code per second
+haproxy,server.http500ResponsesPerSecond,PRate,true,HTTP responses with 5xx code per second
+haproxy,server.httpOtherResponsesPerSecond,PRate,true,HTTP responses with other codes (protocol error)
 haproxy,server.failedHealthCheckDetails,Attribute,true,Failed health check details
-haproxy,server.dataTransfersAbortedByClientPerSecond,Rate,true,Number of data transfers aborted by the client per second
-haproxy,server.dataTransfersAbortedByServerPerSecond,Rate,true,Number of data transfers aborted by the server per second
+haproxy,server.dataTransfersAbortedByClientPerSecond,PRate,true,Number of data transfers aborted by the client per second
+haproxy,server.dataTransfersAbortedByServerPerSecond,PRate,true,Number of data transfers aborted by the server per second
 haproxy,server.timeSinceLastSessionAssignedInSeconds,Gauge,true,Number of seconds since last session assigned to backend
 haproxy,server.healthCheckContents,Attribute,true,Last health check contents or textual error
 haproxy,server.agentCheckContents,Attribute,true,Last agent check contents or textual error

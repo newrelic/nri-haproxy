@@ -23,7 +23,7 @@ type argumentList struct {
 	Username    string `default:"" help:"The HAProxy basic auth username."`
 	Password    string `default:"" help:"The HAProxy basic auth password."`
 	StatsURL    string `default:"" help:"The URL where HAProxy stats are available."`
-	ClusterName string `default:"" help:"The URL where HAProxy stats are available."`
+	ClusterName string `default:"" help:"Cluster name to identify this HAProxy instance."`
 }
 
 func main() {
