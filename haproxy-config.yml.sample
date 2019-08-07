@@ -4,8 +4,11 @@ instances:
   - name: haproxy
     # Command can be all_data, metrics, or inventory
     command: all_data
+    labels:
+      env: production
+      label: haproxy-cluster-member-1
     arguments:
-      # The URL to the enabled stats page on the 
+      # The URL to the enabled stats page on the
       # HAProxy instance
       stats_url: http://haproxy-instance/stats
       # Basic auth username
