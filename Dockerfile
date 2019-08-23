@@ -7,5 +7,6 @@ RUN go get -d github.com/newrelic/nri-haproxy/... && \
 FROM newrelic/infrastructure:latest
 ENV NRIA_IS_FORWARD_ONLY true
 ENV NRIA_K8S_INTEGRATION true
-COPY --from=builder /go/src/github.com/newrelic/nri-haproxy/bin/nr-haproxy /var/db/newrelic-infra/newrelic-integrations/bin/nr-haproxy
-COPY --from=builder /go/src/github.com/newrelic/nri-haproxy/haproxy-definition.yml /var/db/newrelic-infra/newrelic-integrations/definition.yml
+COPY --from=builder /go/src/github.com/newrelic/nri-haproxy/bin/nr-haproxy /nri-sidecar/newrelic-infra/newrelic-integrations/bin/nr-haproxy
+COPY --from=builder /go/src/github.com/newrelic/nri-haproxy/haproxy-definition.yml /nri-sidecar/newrelic-infra/newrelic-integrations/definition.yml
+USER 1000
