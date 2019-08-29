@@ -1,6 +1,6 @@
 ##### Description of the problem
 
-This form is for `nri-nginx` bug reports and feature requests only.
+This form is for `nri-haproxy` bug reports and feature requests only.
 This is NOT a help site. Do not ask help questions here.
 If you need help, please use [newrelic support](http://support.newrelic.com/).
 
