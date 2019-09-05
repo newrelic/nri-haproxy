@@ -2,6 +2,8 @@
 
 Reports status and metrics for HAProxy service
 
+See our [documentation web site](https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/haproxy-monitoring-integration) for more details.
+
 ## Requirements
 
 HAProxy instance with the statistics page enabled and activated.
