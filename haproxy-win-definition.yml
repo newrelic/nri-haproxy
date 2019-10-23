@@ -1,0 +1,22 @@
+name: com.newrelic.haproxy
+description: Reports status and metrics for haproxy service
+protocol_version: 2
+os: windows
+
+commands:
+  all_data:
+    command:
+      - ./bin/nr-haproxy.exe
+    prefix: config/haproxy
+    interval: 15
+  metrics:
+    command:
+      - ./bin/nr-haproxy.exe
+      - --metrics
+    interval: 15
+  inventory:
+    command:
+      - ./bin/nr-haproxy.exe
+      - --inventory
+    prefix: config/haproxy
+    interval: 15
