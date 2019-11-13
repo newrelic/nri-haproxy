@@ -6,17 +6,17 @@ os: windows
 commands:
   all_data:
     command:
-      - ./bin/nr-haproxy.exe
+      - .\bin\nr-haproxy.exe
     prefix: config/haproxy
     interval: 15
   metrics:
     command:
-      - ./bin/nr-haproxy.exe
+      - .\bin\nr-haproxy.exe
       - --metrics
     interval: 15
   inventory:
     command:
-      - ./bin/nr-haproxy.exe
+      - .\bin\nr-haproxy.exe
       - --inventory
     prefix: config/haproxy
     interval: 15
