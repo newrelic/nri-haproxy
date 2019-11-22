@@ -12,7 +12,7 @@ import (
 
 const (
 	integrationName    = "com.newrelic.haproxy"
-	integrationVersion = "2.0.3"
+	integrationVersion = "2.1.0"
 )
 
 var (

@@ -6,17 +6,17 @@ os: linux
 commands:
   all_data:
     command:
-      - ./bin/nr-haproxy
+      - ./bin/nri-haproxy
     prefix: config/haproxy
     interval: 15
   metrics:
     command:
-      - ./bin/nr-haproxy
+      - ./bin/nri-haproxy
       - --metrics
     interval: 15
   inventory:
     command:
-      - ./bin/nr-haproxy
+      - ./bin/nri-haproxy
       - --inventory
     prefix: config/haproxy
     interval: 15
