@@ -1,0 +1,26 @@
+  haproxy-config.yml: |
+    ----
+    # Run auto discovery to find pods with label "app=haproxy"
+    # https://docs.newrelic.com/docs/integrations/host-integrations/installation/container-auto-discovery
+    discovery:
+      command:
+        # Run NRI Discovery for Kubernetes
+        # https://github.com/newrelic/nri-discovery-kubernetes
+        exec: /var/db/newrelic-infra/nri-discovery-kubernetes
+        match:
+          label.app: haproxy
+    integrations:
+      - name: nri-haproxy
+        labels:
+          env: production
+          label: haproxy-cluster-member-1
+        env:
+          # The URL to the enabled stats page on the
+          # HAProxy instance using the discovered IP as the host address
+          STATS_URL: http://${discovery.ip}/stats
+          # Basic auth username
+          USERNAME: cacheuser
+          # Basic auth password
+          PASSWORD: password
+          # A user defined cluster name for the HAProxy instance
+          CLUSTER_NAME: < 'my_haproxy_1' or  take it from the pod label "cluster_name" '${discovery.label.cluster_name}' >
