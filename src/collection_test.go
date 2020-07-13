@@ -3,9 +3,13 @@ package main
 import (
 	"bytes"
 	"testing"
+	"time"
 
+	"github.com/newrelic/infra-integrations-sdk/data/metadata"
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_createStatsRequest_Error(t *testing.T) {
@@ -83,105 +87,45 @@ func Test_processResponseToMap_Error4(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func Test_collectMetricsOfType(t *testing.T) {
+func Test_collectMetrics(t *testing.T) {
 	from := map[string]string{
 		"pxname": "testpx",
 		"svname": "testsv",
 		"scur":   "3",
+		"smax":   "6",
 		"empty":  "",
-	}
-
-	i, _ := integration.New("test", "test")
-
-	collectMetricsOfType("ha-frontend", HAProxyFrontendStats, from, i, "testhost")
-
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
-	e, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
-	if err != nil {
-		t.Error(err)
-	}
-
-	assert.Equal(t, 7, len(e.Metrics[0].Metrics))
-	assert.Equal(t, float64(3.0), e.Metrics[0].Metrics["frontend.currentSessions"])
-	assert.Equal(t, nil, e.Metrics[0].Metrics["empty"])
-}
-
-func Test_collectInventoryOfType(t *testing.T) {
-	from := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
-		"slim":   "4",
-		"empty":  "",
-	}
-
-	i, _ := integration.New("test", "test")
-
-	collectInventoryOfType("ha-frontend", from, i, "testClusterName")
-
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
-	e, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
-	if err != nil {
-		t.Error(err)
-	}
-
-	assert.Equal(t, 1, len(e.Inventory.Items()))
-	assert.Equal(t, "4", e.Inventory.Items()["slim"]["value"])
-	assert.Equal(t, nil, e.Inventory.Items()["empty"]["value"])
-}
-
-func Test_collectMetrics(t *testing.T) {
-	i, _ := integration.New("test", "test")
-
-	frontend := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
 		"type":   "0",
-		"scur":   "1",
 	}
 
-	backend := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
-		"type":   "1",
-		"scur":   "1",
+	i, _ := integration.New("test", "test")
+	e, _ := i.NewEntity("testname", "HAProxyFrontend", "testname")
+
+	now = func() time.Time {
+		t, _ := time.Parse(time.ANSIC, time.ANSIC)
+		return t
+	}
+	collectMetrics(from, e)
+
+	expectedMetrics := metric.Metrics{
+		func() metric.Metric {
+			m, _ := metric.NewGauge(now(), "currentSessions", 3.0)
+			return m
+		}(),
+		func() metric.Metric {
+			m, _ := metric.NewGauge(now(), "maxSessions", 6.0)
+			return m
+		}(),
 	}
 
-	server := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
-		"type":   "2",
-		"scur":   "1",
+	require.Equalf(t, expectedMetrics, e.Metrics, "Expected: %#v\nActual: %#v\n", expectedMetrics, e.Metrics)
+
+	expectedMetadata := metadata.Map{
+		"proxyName":   "testpx",
+		"serviceName": "testsv",
 	}
 
-	invalid := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
-		"type":   "4",
-		"scur":   "1",
-	}
+	require.Equal(t, expectedMetadata, e.Metadata.Metadata)
 
-	collectMetrics(frontend, i, "testhost")
-	collectMetrics(backend, i, "testhost")
-	collectMetrics(server, i, "testhost")
-	collectMetrics(invalid, i, "testhost")
-
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
-	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
-	if err != nil {
-		t.Error(err)
-	}
-	backendEntity, err := i.Entity("testpx/testsv", "ha-backend", entityIDAttrs)
-	if err != nil {
-		t.Error(err)
-	}
-	serverEntity, err := i.Entity("testpx/testsv", "ha-server", entityIDAttrs)
-	if err != nil {
-		t.Error(err)
-	}
-
-	assert.Equal(t, float64(1.0), frontendEntity.Metrics[0].Metrics["frontend.currentSessions"])
-	assert.Equal(t, float64(1.0), backendEntity.Metrics[0].Metrics["backend.currentSessions"])
-	assert.Equal(t, float64(1.0), serverEntity.Metrics[0].Metrics["server.currentSessions"])
 }
 
 func Test_collectInventory(t *testing.T) {
@@ -208,39 +152,13 @@ func Test_collectInventory(t *testing.T) {
 		"slim":   "1",
 	}
 
-	listener := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
-		"type":   "3",
-		"slim":   "1",
-	}
+	frontendEntity, _ := i.NewEntity("testfrontend", "HAProxyFrontend", "")
+	backendEntity, _ := i.NewEntity("testfrontend", "HAProxyFrontend", "")
+	serverEntity, _ := i.NewEntity("testfrontend", "HAProxyFrontend", "")
 
-	invalid := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
-		"type":   "4",
-		"slim":   "1",
-	}
-
-	collectInventory(frontend, i, "testClusterName")
-	collectInventory(backend, i, "testClusterName")
-	collectInventory(server, i, "testClusterName")
-	collectInventory(listener, i, "testClusterName")
-	collectInventory(invalid, i, "testClusterName")
-
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
-	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
-	if err != nil {
-		t.Error(err)
-	}
-	backendEntity, err := i.Entity("testpx/testsv", "ha-backend", entityIDAttrs)
-	if err != nil {
-		t.Error(err)
-	}
-	serverEntity, err := i.Entity("testpx/testsv", "ha-server", entityIDAttrs)
-	if err != nil {
-		t.Error(err)
-	}
+	collectInventory(frontend, frontendEntity)
+	collectInventory(backend, backendEntity)
+	collectInventory(server, serverEntity)
 
 	assert.Equal(t, "1", frontendEntity.Inventory.Items()["slim"]["value"])
 	assert.Equal(t, "1", backendEntity.Inventory.Items()["slim"]["value"])
@@ -254,55 +172,4 @@ func Test_createStatsRequest(t *testing.T) {
 	}
 
 	assert.NotNil(t, req)
-}
-
-func Test_entityName(t *testing.T) {
-	in := map[string]string{
-		"pxname": "test1",
-		"svname": "test2",
-	}
-
-	name, err := entityName(in)
-	assert.Nil(t, err)
-	assert.Equal(t, "test1/test2", name)
-}
-
-func Test_entityName_Error(t *testing.T) {
-	in1 := map[string]string{
-		"pxname": "test1",
-	}
-
-	_, err := entityName(in1)
-	assert.Error(t, err)
-
-	in2 := map[string]string{
-		"svname": "test1",
-	}
-
-	_, err = entityName(in2)
-	assert.Error(t, err)
-}
-
-func Test_collectInventoryOfType_Error(t *testing.T) {
-	i, _ := integration.New("test", "test")
-
-	from := map[string]string{
-		"pxname": "test",
-	}
-
-	collectInventoryOfType("frontend", from, i, "testClusterName")
-
-	assert.Equal(t, 0, len(i.Entities))
-}
-
-func Test_collectMetricsOfType_Error(t *testing.T) {
-	i, _ := integration.New("test", "test")
-
-	from := map[string]string{
-		"pxname": "test",
-	}
-
-	collectMetricsOfType("frontend", HAProxyFrontendStats, from, i, "testhost")
-
-	assert.Equal(t, 0, len(i.Entities))
 }

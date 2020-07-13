@@ -5,17 +5,16 @@ NATIVEOS	 := $(shell go version | awk -F '[ /]' '{print $$4}')
 NATIVEARCH	 := $(shell go version | awk -F '[ /]' '{print $$5}')
 INTEGRATION  := haproxy
 BINARY_NAME   = nri-$(INTEGRATION)
-GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
+GO_PKGS      := $(shell go list ./... )
 GO_FILES     := ./src/
-GOTOOLS       = github.com/kardianos/govendor \
-		gopkg.in/alecthomas/gometalinter.v2 \
-		github.com/axw/gocov/gocov \
-		github.com/stretchr/testify/assert \
+GOTOOLS       = github.com/axw/gocov/gocov \
 		github.com/AlekSi/gocov-xml \
 
-all: build
+.DEFAULT_GOAL := docker-make
 
-build: check-version clean validate test compile
+all: check-version clean validate test compile
+
+build: docker-make
 
 clean:
 	@echo "=== $(INTEGRATION) === [ clean ]: Removing binaries and coverage file..."
@@ -24,32 +23,26 @@ clean:
 tools: check-version
 	@echo "=== $(INTEGRATION) === [ tools ]: Installing tools required by the project..."
 	@go get $(GOTOOLS)
-	@gometalinter.v2 --install
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.27.0
 
 tools-update: check-version
 	@echo "=== $(INTEGRATION) === [ tools-update ]: Updating tools required by the project..."
 	@go get -u $(GOTOOLS)
-	@gometalinter.v2 --install
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.27.0
 
-deps: tools deps-only
-
-deps-only:
-	@echo "=== $(INTEGRATION) === [ deps ]: Installing package dependencies required by the project..."
-	@govendor sync
+deps: tools
 
 validate: deps
-	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running gometalinter..."
-	@gometalinter.v2 --config=.gometalinter.json $(GO_FILES)...
+	@echo "=== $(INTEGRATION) === [ validate ]: Running lints..."
+	@go mod download
+	@golangci-lint run
 
-validate-all: deps
-	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running gometalinter..."
-	@gometalinter.v2 --config=.gometalinter.json --enable=interfacer --enable=gosimple $(GO_FILES)...
 
 compile: deps
 	@echo "=== $(INTEGRATION) === [ compile ]: Building $(BINARY_NAME)..."
 	@go build -o bin/$(BINARY_NAME) $(GO_FILES)
 
-compile-only: deps-only
+compile-only:
 	@echo "=== $(INTEGRATION) === [ compile ]: Building $(BINARY_NAME)..."
 	@go build -o bin/$(BINARY_NAME) $(GO_FILES)
 

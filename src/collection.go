@@ -7,12 +7,16 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
+
+var now = time.Now
 
 func addCSVtoURL(statsURL string) string {
 	return statsURL + `;csv;norefresh`
@@ -78,54 +82,21 @@ func processResponseToMap(body io.Reader) ([]map[string]string, error) {
 	return maps, nil
 }
 
-func collectMetrics(stats map[string]string, i *integration.Integration, url string) {
-	switch stats["type"] {
-	case "0":
-		collectMetricsOfType("ha-frontend", HAProxyFrontendStats, stats, i, url)
-	case "1":
-		collectMetricsOfType("ha-backend", HAProxyBackendStats, stats, i, url)
-	case "2":
-		collectMetricsOfType("ha-server", HAProxyServerStats, stats, i, url)
-	case "3":
-		log.Error("Cannot collect listener stats")
-		return
-	default:
-		log.Error("Invalid type %s", stats["type"])
-		return
+func createEntity(stats map[string]string, i *integration.Integration, url string) (*integration.Entity, error) {
+	entityType, err := entityType(stats)
+	if err != nil {
+		return nil, err
 	}
+
+	entityName, displayName, err := entityName(entityType, stats, url)
+	if err != nil {
+		return nil, err
+	}
+
+	return i.NewEntity(entityName, entityType, displayName)
 }
 
-func collectInventory(stats map[string]string, i *integration.Integration, url string) {
-	switch stats["type"] {
-	case "0":
-		collectInventoryOfType("ha-frontend", stats, i, url)
-	case "1":
-		collectInventoryOfType("ha-backend", stats, i, url)
-	case "2":
-		collectInventoryOfType("ha-server", stats, i, url)
-	case "3":
-		log.Error("Cannot collect listener stats")
-		return
-	default:
-		log.Error("Invalid type %s", stats["type"])
-		return
-	}
-}
-
-func collectInventoryOfType(entityType string, stats map[string]string, i *integration.Integration, url string) {
-	entityName, err := entityName(stats)
-	if err != nil {
-		log.Error("Failed to determine entity name: %s", err.Error())
-		return
-	}
-
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
-	e, err := i.EntityReportedVia(url, entityName, entityType, entityIDAttrs)
-	if err != nil {
-		log.Error("Failed to create entity for %s: %s", entityName, err.Error())
-		return
-	}
-
+func collectInventory(stats map[string]string, e *integration.Entity) {
 	for metricName, metricValue := range stats {
 		if metricValue == "" {
 			continue
@@ -133,7 +104,7 @@ func collectInventoryOfType(entityType string, stats map[string]string, i *integ
 
 		_, ok := HAProxyInventory[metricName]
 		if ok {
-			err := e.SetInventoryItem(metricName, "value", metricValue)
+			err := e.AddInventoryItem(metricName, "value", metricValue)
 			if err != nil {
 				log.Error("Failed to set inventory item for %s", metricName)
 			}
@@ -141,25 +112,24 @@ func collectInventoryOfType(entityType string, stats map[string]string, i *integ
 	}
 }
 
-func collectMetricsOfType(entityType string, definitions map[string]metricDefinition, stats map[string]string, i *integration.Integration, url string) {
-	entityName, err := entityName(stats)
-	if err != nil {
-		log.Error("Failed to determine entity name: %s", err.Error())
+func collectMetrics(stats map[string]string, e *integration.Entity) {
+	switch stats["type"] {
+	case "0":
+		collectMetricsFromDefinition(HAProxyFrontendStats, stats, e)
+	case "1":
+		collectMetricsFromDefinition(HAProxyBackendStats, stats, e)
+	case "2":
+		collectMetricsFromDefinition(HAProxyServerStats, stats, e)
+	case "3":
+		log.Error("Cannot collect listener stats")
+		return
+	default:
+		log.Error("Invalid type %s", stats["type"])
 		return
 	}
+}
 
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
-	e, err := i.EntityReportedVia(url, entityName, entityType, entityIDAttrs)
-	if err != nil {
-		log.Error("Failed to create entity for %s: %s", stats["pxname"], err.Error())
-		return
-	}
-
-	ms := e.NewMetricSet(fmt.Sprintf("HAProxy%sSample", strings.Title(strings.TrimPrefix(entityType, "ha-"))),
-		metric.Attribute{Key: "displayName", Value: e.Metadata.Name},
-		metric.Attribute{Key: "entityName", Value: entityType + ":" + e.Metadata.Name},
-	)
-
+func collectMetricsFromDefinition(definitions map[string]metricDefinition, stats map[string]string, e *integration.Entity) {
 	for metricName, metricValue := range stats {
 		if metricValue == "" {
 			continue
@@ -167,24 +137,104 @@ func collectMetricsOfType(entityType string, definitions map[string]metricDefini
 
 		def, ok := definitions[metricName]
 		if ok {
-			err := ms.SetMetric(def.MetricName, metricValue, def.SourceType)
-			if err != nil {
-				log.Error("Failed to set metric %s for entity %s: %s", metricName, stats["pxname"], err.Error())
+			if def.IsAttribute {
+				err := e.AddMetadata(def.MetricName, metricValue)
+				if err != nil {
+					log.Error("Failed to add metadata to entity: %s", err)
+				}
+				continue
 			}
+
+			currentTime := now()
+			var newMetric metric.Metric
+			switch def.SourceType {
+			case metric.GAUGE:
+				val, err := strconv.ParseFloat(metricValue, 64)
+				if err != nil {
+					log.Error("Failed to parse metric as float: %s", err)
+					continue
+				}
+				newMetric, err = integration.Gauge(currentTime, def.MetricName, val)
+				if err != nil {
+					log.Error("Failed to create metric: %s", err)
+					continue
+				}
+			case metric.COUNT:
+				val, err := strconv.ParseFloat(metricValue, 64)
+				if err != nil {
+					log.Error("Failed to parse metric as float: %s", err)
+					continue
+				}
+				newMetric, err = integration.Count(currentTime, def.MetricName, val)
+				if err != nil {
+					log.Error("Failed to create metric: %s", err)
+					continue
+				}
+			case metric.CUMULATIVE_COUNT:
+				val, err := strconv.ParseFloat(metricValue, 64)
+				if err != nil {
+					log.Error("Failed to parse metric as float: %s", err)
+					continue
+				}
+				newMetric, err = integration.CumulativeCount(currentTime, def.MetricName, val)
+				if err != nil {
+					log.Error("Failed to create metric: %s", err)
+					continue
+				}
+			case metric.CUMULATIVE_RATE:
+				val, err := strconv.ParseFloat(metricValue, 64)
+				if err != nil {
+					log.Error("Failed to parse metric as float: %s", err)
+					continue
+				}
+				newMetric, err = integration.CumulativeRate(currentTime, def.MetricName, val)
+				if err != nil {
+					log.Error("Failed to create metric: %s", err)
+					continue
+				}
+			case metric.RATE:
+				val, err := strconv.ParseFloat(metricValue, 64)
+				if err != nil {
+					log.Error("Failed to parse metric as float: %s", err)
+					continue
+				}
+				newMetric, err = integration.Rate(currentTime, def.MetricName, val)
+				if err != nil {
+					log.Error("Failed to create metric: %s", err)
+					continue
+				}
+			}
+
+			e.AddMetric(newMetric)
 		}
 	}
 }
 
-func entityName(metrics map[string]string) (string, error) {
-	pxname, ok := metrics["pxname"]
+func entityName(entityType string, stats map[string]string, url string) (string, string, error) {
+	pxname, ok := stats["pxname"]
 	if !ok {
-		return "", errors.New("proxy name (pxname) does not exist")
+		return "", "", errors.New("proxy name (pxname) does not exist")
 	}
 
-	svname, ok := metrics["svname"]
+	svname, ok := stats["svname"]
 	if !ok {
-		return "", errors.New("service name (svname) does not exist")
+		return "", "", errors.New("service name (svname) does not exist")
 	}
 
-	return fmt.Sprintf("%s/%s", pxname, svname), nil
+	return fmt.Sprintf("haproxy|%s|%s|%s|%s", url, entityType, pxname, svname), fmt.Sprintf("%s:%s:%s", entityType, pxname, svname), nil
+}
+
+func entityType(stats map[string]string) (string, error) {
+	switch stats["type"] {
+	case "0":
+		return "HAProxyFrontend", nil
+	case "1":
+		return "HAProxyBackend", nil
+	case "2":
+		return "HAProxyServer", nil
+	case "3":
+		return "", errors.New("cannot collect metrics for HAProxyListener")
+	default:
+		return "", fmt.Errorf("unknown type %s", stats["type"])
+	}
 }

@@ -1,4 +1,4 @@
-//go:generate goversioninfo
+//go:generate goversioninfo -o ../resource.syso ../versioninfo.json
 package main
 
 import (
@@ -41,11 +41,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	if args.ClusterName == "" {
-		log.Error("Must supply a cluster name to identify this HAProxy instance")
-		os.Exit(1)
-	}
-
 	client := &http.Client{}
 
 	// Create the http request
@@ -61,6 +56,8 @@ func main() {
 		log.Error("Failed to retrieve stats: %s", err.Error())
 		os.Exit(1)
 	}
+	resp.Body.Close()
+
 	if resp.StatusCode != 200 {
 		log.Error("Failed to retrieve stats with error code %s", resp.Status)
 		os.Exit(1)
@@ -68,19 +65,31 @@ func main() {
 
 	// Process CSV response into an array of metric:value maps
 	haproxyObjects, err := processResponseToMap(resp.Body)
+	if err != nil {
+		log.Error("Failed to parse response: %s", err)
+		os.Exit(1)
+	}
 
 	// Collect metrics and inventory for each row of the result
 	for _, haproxyObject := range haproxyObjects {
+		e, err := createEntity(haproxyObject, haproxyIntegration, args.StatsURL)
+		if err != nil {
+			log.Error("Failed to create entity: %s", err)
+			os.Exit(1)
+		}
+		haproxyIntegration.AddEntity(e)
+
 		if args.HasMetrics() {
-			collectMetrics(haproxyObject, haproxyIntegration, args.StatsURL)
+			collectMetrics(haproxyObject, e)
 		}
 
 		if args.HasInventory() {
-			collectInventory(haproxyObject, haproxyIntegration, args.StatsURL)
+			collectInventory(haproxyObject, e)
 		}
 	}
 
 	if err = haproxyIntegration.Publish(); err != nil {
+		println("ERROR")
 		log.Error("Failed to publish integration: %s", err.Error())
 	}
 }

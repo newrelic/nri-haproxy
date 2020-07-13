@@ -18,7 +18,15 @@ FPM_COMMON_OPTIONS = --verbose -C $(SOURCE_DIR) -s dir -n $(PROJECT_NAME) -v $(V
 FPM_DEB_OPTIONS    = -t deb -p $(PACKAGES_DIR)/deb/
 FPM_RPM_OPTIONS    = -t rpm -p $(PACKAGES_DIR)/rpm/ --epoch 0 --rpm-summary $(SUMMARY)
 
-package: create-bins prep-pkg-env $(PACKAGE_TYPES)
+package:
+	@docker run --rm -v $(PWD):/go/src/github.com/newrelic/$(INTEGRATION_DIR) -w /go/src/github.com/newrelic/$(INTEGRATION_DIR) $(DOCKER_IMAGE) "make" "docker-package"
+
+docker-package: package-deps create-bins prep-pkg-env $(PACKAGE_TYPES)
+
+package-deps:
+	apt-get update
+	apt-get install -y ruby ruby-dev rubygems build-essential rpm
+	gem install --no-document fpm
 
 create-bins:
 	echo "=== Main === [ create-bins ]: creating binary ..."

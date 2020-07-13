@@ -79,7 +79,7 @@ if (-Not $skipTests) {
     {
         echo "Failed running tests"
         exit -1
-    }    
+    }
 }
 
 echo "--- Running Build"
@@ -93,16 +93,13 @@ if (-not $?)
 
 echo "--- Collecting Go main files"
 
-$packages = go list -f "{{.ImportPath}} {{.Name}}" ./...  | ConvertFrom-String -PropertyNames Path, Name
-$mainPackage = $packages | ? { $_.Name -eq 'main' } | % { $_.Path }
-
 echo "generating $integrationName"
-go generate $mainPackage
+go generate ./...
 
 $fileName = ([io.fileinfo]$mainPackage).BaseName
 
 echo "creating $executable"
-go build -ldflags "-X main.buildVersion=$version" -o ".\target\bin\windows_$arch\$executable" $mainPackage
+go build -ldflags "-X main.buildVersion=$version" -o ".\target\bin\windows_$arch\$executable" ./src
 
 If (-Not $installer) {
     exit 0
