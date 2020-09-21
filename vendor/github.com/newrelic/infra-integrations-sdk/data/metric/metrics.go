@@ -3,24 +3,18 @@ package metric
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"sort"
 	"strconv"
 
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/persist"
 	"github.com/pkg/errors"
 )
 
-// Attribute represents a metric attribute key-value pair.
-type Attribute struct {
-	Key   string
-	Value string
-}
-
 const (
 	// nsSeparator is the metric namespace separator
 	nsSeparator = "::"
-	// nsAttributeSeparator is the metric attribute key-value separator applied to generate the metric ns.
-	nsAttributeSeparator = "=="
 )
 
 // Errors
@@ -37,12 +31,12 @@ var (
 type Set struct {
 	storer       persist.Storer
 	Metrics      map[string]interface{}
-	nsAttributes []Attribute
+	nsAttributes []attribute.Attribute
 }
 
 // NewSet creates new metrics set, optionally related to a list of attributes. These attributes makes the metric-set unique.
 // If related attributes are used, then new attributes are added.
-func NewSet(eventType string, storer persist.Storer, attributes ...Attribute) (s *Set) {
+func NewSet(eventType string, storer persist.Storer, attributes ...attribute.Attribute) (s *Set) {
 	s = &Set{
 		Metrics:      make(map[string]interface{}),
 		storer:       storer,
@@ -59,17 +53,9 @@ func NewSet(eventType string, storer persist.Storer, attributes ...Attribute) (s
 }
 
 // AddCustomAttributes add customAttributes to MetricSet
-func AddCustomAttributes(metricSet *Set, customAttributes []Attribute) {
+func AddCustomAttributes(metricSet *Set, customAttributes []attribute.Attribute) {
 	for _, attr := range customAttributes {
 		metricSet.setSetAttribute(attr.Key, attr.Value)
-	}
-}
-
-// Attr creates an attribute aimed to namespace a metric-set.
-func Attr(key string, value string) Attribute {
-	return Attribute{
-		Key:   key,
-		Value: value,
 	}
 }
 
@@ -126,7 +112,20 @@ func castToFloat(value interface{}) (float64, error) {
 		return 0, nil
 	}
 
-	return strconv.ParseFloat(fmt.Sprintf("%v", value), 64)
+	parsedValue, err := strconv.ParseFloat(fmt.Sprintf("%v", value), 64)
+	if err != nil {
+		return 0, err
+	}
+
+	if isNaNOrInf(parsedValue) {
+		return 0, ErrNonNumeric
+	}
+
+	return parsedValue, nil
+}
+
+func isNaNOrInf(f float64) bool {
+	return math.IsNaN(f) || math.IsInf(f, 0) || math.IsInf(f, -1)
 }
 
 func (ms *Set) elapsedDifference(name string, absolute interface{}, sourceType SourceType) (elapsed float64, err error) {
@@ -170,7 +169,7 @@ func (ms *Set) elapsedDifference(name string, absolute interface{}, sourceType S
 		return
 	}
 
-	if sourceType == RATE {
+	if sourceType == RATE || sourceType == PRATE {
 		elapsed = elapsed / float64(duration)
 	}
 
@@ -183,7 +182,7 @@ func (ms *Set) namespace(metricName string) string {
 	separator := ""
 
 	attrs := ms.nsAttributes
-	sort.Sort(Attributes(attrs))
+	sort.Sort(attribute.Attributes(attrs))
 
 	for _, attr := range attrs {
 		ns = fmt.Sprintf("%s%s%s", ns, separator, attr.Namespace())
@@ -191,11 +190,6 @@ func (ms *Set) namespace(metricName string) string {
 	}
 
 	return fmt.Sprintf("%s%s%s", ns, separator, metricName)
-}
-
-// Namespace generates the string value of an attribute used to namespace a metric.
-func (a *Attribute) Namespace() string {
-	return fmt.Sprintf("%s%s%s", a.Key, nsAttributeSeparator, a.Value)
 }
 
 // MarshalJSON adapts the internal structure of the metrics Set to the payload that is compliant with the protocol
@@ -206,23 +200,4 @@ func (ms *Set) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON unserializes protocol compliant JSON metrics into the metric set.
 func (ms *Set) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &ms.Metrics)
-}
-
-// Required for Go < v.18, as these do not include sort.Slice
-
-// Attributes list of attributes
-type Attributes []Attribute
-
-// Len ...
-func (a Attributes) Len() int { return len(a) }
-
-// Swap ...
-func (a Attributes) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
-
-// Less ...
-func (a Attributes) Less(i, j int) bool {
-	if a[i].Key == a[j].Key {
-		return a[i].Value < a[j].Value
-	}
-	return a[i].Key < a[j].Key
 }

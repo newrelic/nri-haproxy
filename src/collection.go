@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
@@ -156,8 +156,8 @@ func collectMetricsOfType(entityType string, definitions map[string]metricDefini
 	}
 
 	ms := e.NewMetricSet(fmt.Sprintf("HAProxy%sSample", strings.Title(strings.TrimPrefix(entityType, "ha-"))),
-		metric.Attribute{Key: "displayName", Value: e.Metadata.Name},
-		metric.Attribute{Key: "entityName", Value: entityType + ":" + e.Metadata.Name},
+		attribute.Attribute{Key: "displayName", Value: e.Metadata.Name},
+		attribute.Attribute{Key: "entityName", Value: entityType + ":" + e.Metadata.Name},
 	)
 
 	for metricName, metricValue := range stats {
