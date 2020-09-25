@@ -1,6 +1,6 @@
-[![New Relic Community Plus header](https://raw.githubusercontent.com/newrelic/open-source-office/master/examples/categories/images/Community_Plus.png)](https://opensource.newrelic.com/oss-category/#community-plus)
+[![Community Plus header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Community_Plus.png)](https://opensource.newrelic.com/oss-category/#community-plus)
 
-# New Relic integration for HAProxy 
+# New Relic integration for HAProxy
 
 Reports status and metrics for HAProxy service. See our [documentation web site](https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/haproxy-monitoring-integration) for more details.
 
@@ -15,7 +15,7 @@ For installation and usage instructions, see our [documentation web site](https:
 ## Compatibility
 
 * Supported OS: No limitations
-* Supported versions: HAProxy 1.3 - 1.8 
+* Supported versions: HAProxy 1.3 - 1.8
 
 ## Building
 
@@ -27,7 +27,7 @@ After cloning this repository, go to the directory of the HAProxy integration an
 $ make
 ```
 
-The command above executes the tests for the HAProxy integration and builds an executable file called `nri-haproxy` under the `bin` directory. 
+The command above executes the tests for the HAProxy integration and builds an executable file called `nri-haproxy` under the `bin` directory.
 
 To start the integration, run `nri-haproxy`:
 
