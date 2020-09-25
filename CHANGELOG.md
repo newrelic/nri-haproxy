@@ -5,9 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.1 (2020-09-25)
+### Fixed
+- Updated the SDK to fix bug with calculating positive rates
+
 ## 2.1.0 (2019-11-18)
 ### Changed
 - Renamed the integration executable from nr-haproxy to nri-haproxy in order to be consistent with the package naming. **Important Note:** if you have any security module rules (eg. SELinux), alerts or automation that depends on the name of this binary, these will have to be updated.
+
 ## 2.0.3 - 2019-10-23
 ### Added
 - Added resources for windows MSI packaging
