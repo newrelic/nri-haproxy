@@ -41,3 +41,6 @@ debug
 
 Makefile-deploy.mk
 haproxy-config.yml
+
+dist
+*.gpg
