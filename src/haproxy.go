@@ -12,7 +12,7 @@ import (
 
 const (
 	integrationName    = "com.newrelic.haproxy"
-	integrationVersion = "2.1.1"
+	integrationVersion = "2.1.2"
 )
 
 var (
@@ -68,6 +68,9 @@ func main() {
 
 	// Process CSV response into an array of metric:value maps
 	haproxyObjects, err := processResponseToMap(resp.Body)
+	if err != nil {
+		log.Error("Failed to parse csv: %s", err)
+	}
 
 	// Collect metrics and inventory for each row of the result
 	for _, haproxyObject := range haproxyObjects {
