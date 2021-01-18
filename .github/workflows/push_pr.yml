@@ -23,6 +23,13 @@ jobs:
       - uses: actions/checkout@v2
       - name: Validate code
         run: make ci/validate
+      - name: Validate Test Slack
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.COREINT_SLACK_TOKEN }}
+          slack-channel: ${{ secrets.COREINT_SLACK_CHANNEL }}
+          slack-text: "Testing slack credentials from nri-haproxy."
+
 
   snyk:
     name: Run security checks via snyk
