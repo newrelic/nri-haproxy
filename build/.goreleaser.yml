@@ -45,13 +45,18 @@ nfpms:
     formats:
       - deb
     bindir: "/var/db/newrelic-infra/newrelic-integrations/bin"
-    files:
-      "haproxy-config.yml.sample": "/etc/newrelic-infra/integrations.d/haproxy-config.yml.sample"
-      "CHANGELOG.md": "/usr/share/doc/nri-haproxy/CHANGELOG.md"
-      "README.md":  "/usr/share/doc/nri-haproxy/README.md"
-      "LICENSE": "/usr/share/doc/nri-haproxy/LICENSE"
-    config_files:
-      "haproxy-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/haproxy-definition.yml"
+    contents:
+      - src: haproxy-config.yml.sample
+        dst: /etc/newrelic-infra/integrations.d/haproxy-config.yml.sample
+      - src: CHANGELOG.md
+        dst: /usr/share/doc/nri-haproxy/CHANGELOG.md
+      - src: README.md
+        dst: /usr/share/doc/nri-haproxy/README.md
+      - src: LICENSE
+        dst: /usr/share/doc/nri-haproxy/LICENSE
+      - src: haproxy-definition.yml
+        dst: /var/db/newrelic-infra/newrelic-integrations/haproxy-definition.yml
+        type: config
     dependencies:
       - "newrelic-infra"
 
@@ -68,13 +73,18 @@ nfpms:
     formats:
       - rpm
     bindir: "/var/db/newrelic-infra/newrelic-integrations/bin"
-    files:
-      "haproxy-config.yml.sample": "/etc/newrelic-infra/integrations.d/haproxy-config.yml.sample"
-      "CHANGELOG.md": "/usr/share/doc/nri-haproxy/CHANGELOG.md"
-      "README.md":  "/usr/share/doc/nri-haproxy/README.md"
-      "LICENSE": "/usr/share/doc/nri-haproxy/LICENSE"
-    config_files:
-      "haproxy-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/haproxy-definition.yml"
+    contents:
+      - src: haproxy-config.yml.sample
+        dst: /etc/newrelic-infra/integrations.d/haproxy-config.yml.sample
+      - src: CHANGELOG.md
+        dst: /usr/share/doc/nri-haproxy/CHANGELOG.md
+      - src: README.md
+        dst: /usr/share/doc/nri-haproxy/README.md
+      - src: LICENSE
+        dst: /usr/share/doc/nri-haproxy/LICENSE
+      - src: haproxy-definition.yml
+        dst: /var/db/newrelic-infra/newrelic-integrations/haproxy-definition.yml
+        type: config
     dependencies:
       - "newrelic-infra"
     overrides:
