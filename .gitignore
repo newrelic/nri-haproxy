@@ -41,3 +41,16 @@ debug
 
 Makefile-deploy.mk
 haproxy-config.yml
+
+bin/
+dist/
+
+# Local development tools/files
+.idea
+.env
+.envrc
+*.gpg
+
+# build files
+src/versioninfo.json
+src/resource.syso

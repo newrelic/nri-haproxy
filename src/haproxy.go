@@ -2,8 +2,11 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
+	"runtime"
+	"strings"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/integration"
@@ -11,12 +14,7 @@ import (
 )
 
 const (
-	integrationName    = "com.newrelic.haproxy"
-	integrationVersion = "2.1.2"
-)
-
-var (
-	args argumentList
+	integrationName = "com.newrelic.haproxy"
 )
 
 type argumentList struct {
@@ -25,13 +23,33 @@ type argumentList struct {
 	Password    string `default:"" help:"The HAProxy basic auth password."`
 	StatsURL    string `default:"" help:"The URL where HAProxy stats are available."`
 	ClusterName string `default:"" help:"Cluster name to identify this HAProxy instance."`
+	ShowVersion bool   `default:"false" help:"Print build information and exit"`
 }
+
+var (
+	args               argumentList
+	integrationVersion = "0.0.0"
+	gitCommit          = ""
+	buildDate          = ""
+)
 
 func main() {
 	haproxyIntegration, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	if err != nil {
 		log.Error("Failed to create integration: %s", err)
 		os.Exit(1)
+	}
+
+	if args.ShowVersion {
+		fmt.Printf(
+			"New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s, BuildDate: %s\n",
+			strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
+			integrationVersion,
+			fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+			runtime.Version(),
+			gitCommit,
+			buildDate)
+		os.Exit(0)
 	}
 
 	log.SetupLogging(args.Verbose)
