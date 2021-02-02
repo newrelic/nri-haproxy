@@ -107,7 +107,7 @@ archives:
       - nri-win
     name_template: "{{ .ProjectName }}-{{ .Arch }}.{{ .Version }}_dirty"
     files:
-      - haproxy-win-config.yml.sample
+      - haproxy-config.yml.sample
       - haproxy-win-definition.yml
     format: zip
 
