@@ -101,7 +101,7 @@ func Test_collectMetricsOfType(t *testing.T) {
 		t.Error(err)
 	}
 
-	assert.Equal(t, 7, len(e.Metrics[0].Metrics))
+	assert.Equal(t, 8, len(e.Metrics[0].Metrics))
 	assert.Equal(t, float64(3.0), e.Metrics[0].Metrics["frontend.currentSessions"])
 	assert.Equal(t, nil, e.Metrics[0].Metrics["empty"])
 }
