@@ -156,6 +156,8 @@ func collectMetricsOfType(entityType string, definitions map[string]metricDefini
 	}
 
 	ms := e.NewMetricSet(fmt.Sprintf("HAProxy%sSample", strings.Title(strings.TrimPrefix(entityType, "ha-"))),
+		// Decorate with haproxyClusterName as well, since clusterName might be overwritten by nri-kubernetes
+		attribute.Attribute{Key: "haproxyClusterName", Value: args.ClusterName},
 		attribute.Attribute{Key: "displayName", Value: e.Metadata.Name},
 		attribute.Attribute{Key: "entityName", Value: entityType + ":" + e.Metadata.Name},
 	)
