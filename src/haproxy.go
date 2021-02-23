@@ -19,11 +19,12 @@ const (
 
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
-	Username    string `default:"" help:"The HAProxy basic auth username."`
-	Password    string `default:"" help:"The HAProxy basic auth password."`
-	StatsURL    string `default:"" help:"The URL where HAProxy stats are available."`
-	ClusterName string `default:"" help:"Cluster name to identify this HAProxy instance."`
-	ShowVersion bool   `default:"false" help:"Print build information and exit"`
+	Username           string `default:"" help:"The HAProxy basic auth username."`
+	Password           string `default:"" help:"The HAProxy basic auth password."`
+	StatsURL           string `default:"" help:"The URL where HAProxy stats are available."`
+	ClusterName        string `default:"" help:"(Deprecated in favor of HAProxyClusterName)"`
+	HAProxyClusterName string `default:"" help:"Cluster name to identify this HAProxy instance."`
+	ShowVersion        bool   `default:"false" help:"Print build information and exit"`
 }
 
 var (
@@ -59,11 +60,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	if args.ClusterName == "" {
-		log.Error("Must supply a cluster name to identify this HAProxy instance")
-		os.Exit(1)
+	// ClusterName is being deprecated to avoid the collision with the nri-kubernetes integration.
+	// For backward compatibility reasons the following fallback logic has been implemented to avoid breaking existant config.
+	if args.HAProxyClusterName == "" {
+		if args.ClusterName == "" {
+			log.Error("Must supply a cluster name to identify this HAProxy instance. Use HAProxyClusterName config parameter")
+			os.Exit(1)
+		}
+		args.HAProxyClusterName = args.ClusterName
+		log.Warn("Using the deprecated config ClusterName instead of HAProxyClusterName")
 	}
-
 	client := &http.Client{}
 
 	// Create the http request

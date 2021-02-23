@@ -16,4 +16,4 @@ instances:
       # Basic auth password
       password: password
       # A user defined cluster name for the HAProxy instance
-      cluster_name: my_haproxy_1
+      ha_proxy_cluster_name: my_haproxy_1
