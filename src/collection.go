@@ -119,7 +119,7 @@ func collectInventoryOfType(entityType string, stats map[string]string, i *integ
 		return
 	}
 
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.HAProxyClusterName}
 	e, err := i.EntityReportedVia(url, entityName, entityType, entityIDAttrs)
 	if err != nil {
 		log.Error("Failed to create entity for %s: %s", entityName, err.Error())
@@ -148,7 +148,7 @@ func collectMetricsOfType(entityType string, definitions map[string]metricDefini
 		return
 	}
 
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.HAProxyClusterName}
 	e, err := i.EntityReportedVia(url, entityName, entityType, entityIDAttrs)
 	if err != nil {
 		log.Error("Failed to create entity for %s: %s", stats["pxname"], err.Error())
@@ -156,6 +156,8 @@ func collectMetricsOfType(entityType string, definitions map[string]metricDefini
 	}
 
 	ms := e.NewMetricSet(fmt.Sprintf("HAProxy%sSample", strings.Title(strings.TrimPrefix(entityType, "ha-"))),
+		// Decorate with haproxyClusterName as well, since clusterName might be overwritten by nri-kubernetes
+		attribute.Attribute{Key: "haproxyClusterName", Value: args.HAProxyClusterName},
 		attribute.Attribute{Key: "displayName", Value: e.Metadata.Name},
 		attribute.Attribute{Key: "entityName", Value: entityType + ":" + e.Metadata.Name},
 	)

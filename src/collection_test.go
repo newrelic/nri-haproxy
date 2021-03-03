@@ -95,13 +95,13 @@ func Test_collectMetricsOfType(t *testing.T) {
 
 	collectMetricsOfType("ha-frontend", HAProxyFrontendStats, from, i, "testhost")
 
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.HAProxyClusterName}
 	e, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
 	}
 
-	assert.Equal(t, 7, len(e.Metrics[0].Metrics))
+	assert.Equal(t, 8, len(e.Metrics[0].Metrics))
 	assert.Equal(t, float64(3.0), e.Metrics[0].Metrics["frontend.currentSessions"])
 	assert.Equal(t, nil, e.Metrics[0].Metrics["empty"])
 }
@@ -118,7 +118,7 @@ func Test_collectInventoryOfType(t *testing.T) {
 
 	collectInventoryOfType("ha-frontend", from, i, "testClusterName")
 
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.HAProxyClusterName}
 	e, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
@@ -165,7 +165,7 @@ func Test_collectMetrics(t *testing.T) {
 	collectMetrics(server, i, "testhost")
 	collectMetrics(invalid, i, "testhost")
 
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.HAProxyClusterName}
 	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)
@@ -228,7 +228,7 @@ func Test_collectInventory(t *testing.T) {
 	collectInventory(listener, i, "testClusterName")
 	collectInventory(invalid, i, "testClusterName")
 
-	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.ClusterName}
+	entityIDAttrs := integration.IDAttribute{Key: "clusterName", Value: args.HAProxyClusterName}
 	frontendEntity, err := i.Entity("testpx/testsv", "ha-frontend", entityIDAttrs)
 	if err != nil {
 		t.Error(err)

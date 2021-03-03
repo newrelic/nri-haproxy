@@ -25,4 +25,4 @@
           # Basic auth password
           PASSWORD: password
           # A user defined cluster name for the HAProxy instance
-          CLUSTER_NAME: < 'my_haproxy_1' or  take it from the pod label "cluster_name" '${discovery.label.cluster_name}' >
+          HA_PROXY_CLUSTER_NAME: < 'my_haproxy_1' or  take it from the pod label that identifies your haproxy cluster '${discovery.name}' >
