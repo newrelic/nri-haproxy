@@ -165,10 +165,11 @@ jobs:
           AWS_REGION: "us-east-1"
           DISABLE_LOCK: false
           SCHEMA: "ohi"
+          ENV: pre-release
         with:
           disable_lock: ${{ env.DISABLE_LOCK }}
           run_id: ${{ github.run_id }}
-          env: pre-release
+          env: ${{ env.ENV }}
           tag: ${{env.TAG}}
           app_name: "nri-${{env.INTEGRATION}}"
           repo_name: ${{ env.ORIGINAL_REPO_NAME }}
