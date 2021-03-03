@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.0 (2021-03-03)
+### Changed
+- Decorate metrics with `haproxyClusterName`
+  `clusterName` (deprecated) attribute might get overwritten by the Kubernetes integration when running inside kubernetes.
+  This change allows HAProxy entities to be uniquely identified when multiple HAProxy clusters are located in the same Kubernetes cluster.
+
 ## 2.1.2 (2020-11-06)
 ### Fixed
 - Print error when CSV parsing fails
