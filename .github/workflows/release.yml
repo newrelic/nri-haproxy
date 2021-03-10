@@ -25,14 +25,13 @@ jobs:
           username: ${{ secrets.OHAI_DOCKER_HUB_ID }}
           password: ${{ secrets.OHAI_DOCKER_HUB_PASSWORD }}
       - name: Publish to S3 action
-        uses: newrelic/infrastructure-publish-action@main
+        uses: newrelic/infrastructure-publish-action@v1
         env:
           AWS_S3_BUCKET_NAME: "nr-downloads-main"
           AWS_S3_LOCK_BUCKET_NAME: "onhost-ci-lock"
           AWS_REGION: "us-east-1"
           DISABLE_LOCK: false
           SCHEMA: "ohi"
-          ENV: release
         with:
           # lock enabled
           disable_lock: ${{ env.DISABLE_LOCK }}
@@ -44,10 +43,10 @@ jobs:
           # 'ohi' is for integrations
           schema: ${{env.SCHEMA}}
           aws_region: ${{ env.AWS_REGION }}
-          aws_role_arn: ${{ secrets.AWS_ROLE_ARN_PROD }}
-          aws_role_session_name: ${{ secrets.AWS_ROLE_SESSION_NAME_PROD }}
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          aws_role_arn: ${{ secrets.OHAI_AWS_ROLE_ARN_PRODUCTION }}
+          aws_role_session_name: ${{ secrets.OHAI_AWS_ROLE_SESSION_NAME_PRODUCTION }}
+          aws_access_key_id: ${{ secrets.OHAI_AWS_ACCESS_KEY_ID_PRODUCTION }}
+          aws_secret_access_key: ${{ secrets.OHAI_AWS_SECRET_ACCESS_KEY_PRODUCTIOB }}
           aws_s3_bucket_name: ${{ env.AWS_S3_BUCKET_NAME }}
           # used for locking in case of concurrent releases
           aws_s3_lock_bucket_name: ${{ env.AWS_S3_LOCK_BUCKET_NAME }}
