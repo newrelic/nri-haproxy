@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+  haproxy:
+    image: haproxy:2.3
+    restart: always
+    ports:
+    - "8404:8404"
+    links:
+    - nri-haproxy
+    volumes:
+    - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+  nri-haproxy:
+    container_name: integration_nri-haproxy_1
+    build:
+      context: ../../
+      dockerfile: tests/integration/Dockerfile
+    dns:
+      - 8.8.8.8

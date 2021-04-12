@@ -1,0 +1,415 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "required": [
+    "name",
+    "protocol_version",
+    "integration_version",
+    "data"
+  ],
+  "properties": {
+    "name": {
+      "minLength": 1,
+      "pattern": "^com.newrelic.haproxy$",
+      "type": "string"
+    },
+    "protocol_version": {
+      "minLength": 1,
+      "pattern": "^3$",
+      "type": "string"
+    },
+    "integration_version": {
+      "minLength": 1,
+      "pattern": "^[0-9]+.[0-9]+.[0-9]+$",
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "minLength": 1,
+                  "pattern": "^stats/FRONTEND$",
+                  "type": "string"
+                },
+                "type": {
+                  "minLength": 1,
+                  "pattern": "^ha-frontend$",
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "Key",
+                      "Value"
+                    ],
+                    "properties": {
+                      "Key": {
+                        "minLength": 1,
+                        "pattern": "^clusterName$",
+                        "type": "string"
+                      },
+                      "Value": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "metrics": {
+              "maxItems": 0,
+              "type": "array",
+              "items": {}
+            },
+            "inventory": {
+              "minProperties": 1,
+              "required": [
+                "iid",
+                "pid",
+                "rate_lim",
+                "sid",
+                "slim"
+              ],
+              "type": "object",
+              "properties": {
+                "iid": {
+                  "required": [
+                    "value"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "pid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "rate_lim": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "sid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "slim": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "required": [],
+                "type": []
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "Key",
+                      "Value"
+                    ],
+                    "properties": {
+                      "Key": {
+                        "minLength": 1,
+                        "pattern": "^clusterName$",
+                        "type": "string"
+                      },
+                      "Value": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "metrics": {
+              "maxItems": 0,
+              "type": "array",
+              "additionalItems": false,
+              "items": {}
+            },
+            "inventory": {
+              "minProperties": 1,
+              "type": "object",
+              "required": [
+                "iid",
+                "pid",
+                "qmax",
+                "sid"
+              ],
+              "properties": {
+                "iid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "pid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "qmax": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "sid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "events": {
+              "type": "array"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "Key",
+                      "Value"
+                    ],
+                    "properties": {
+                      "Key": {
+                        "minLength": 1,
+                        "pattern": "^clusterName$",
+                        "type": "string"
+                      },
+                      "Value": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "metrics": {
+              "maxItems": 0,
+              "type": "array",
+              "items": {}
+            },
+            "inventory": {
+              "minProperties": 1,
+              "type": "object",
+              "required": [
+                "iid",
+                "pid",
+                "qmax",
+                "sid",
+                "slim"
+              ],
+              "properties": {
+                "iid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "pid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "qmax": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "sid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "slim": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "events": {
+              "type": "array"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -54,6 +54,12 @@ test: deps
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
 	@gocov test -race $(GO_FILES)... | gocov-xml > coverage.xml
 
+integration-test:
+	@echo "=== $(INTEGRATION) === [ test ]: running integration tests..."
+	@docker-compose -f tests/integration/docker-compose.yml up -d --build
+	@go test -v -tags=integration ./tests/integration/. || (ret=$$?; docker-compose -f tests/integration/docker-compose.yml down && exit $$ret)
+	@docker-compose -f tests/integration/docker-compose.yml down
+
 # Include thematic Makefiles
 include $(CURDIR)/build/ci.mk
 include $(CURDIR)/build/release.mk
@@ -70,4 +76,4 @@ ifneq "$(GOARCH)" "$(NATIVEARCH)"
 endif
 endif
 
-.PHONY: all build clean tools tools-update deps validate compile test check-version
+.PHONY: all build clean tools tools-update deps validate compile test integration-test check-version
