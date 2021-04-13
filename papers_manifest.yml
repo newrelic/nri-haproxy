@@ -1,33 +1,49 @@
 golang:
   github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/args:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/args
+  github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/data/attribute:
+    license: Apache-2.0
+    license_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
+    project_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/data/attribute
   github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/data/event:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/data/event
   github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/data/inventory:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/data/inventory
   github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/data/metric:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/data/metric
   github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/integration:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/integration
   github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/log:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/log
   github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/persist:
-    license: Unknown
+    license: Apache-2.0
     license_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE
     project_url: github.com/newrelic/nri-haproxy/vendor/github.com/newrelic/infra-integrations-sdk/persist
   github.com/newrelic/nri-haproxy/vendor/github.com/pkg/errors:
     license: BSD-2-Clause
     license_url: github.com/newrelic/nri-haproxy/vendor/github.com/pkg/errors/LICENSE
     project_url: github.com/newrelic/nri-haproxy/vendor/github.com/pkg/errors
+  github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonpointer:
+    license: Apache-2.0
+    license_url: github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonpointer/LICENSE-APACHE-2.0.txt
+    project_url: github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonpointer
+  github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonreference:
+    license: Apache-2.0
+    license_url: github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonreference/LICENSE-APACHE-2.0.txt
+    project_url: github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonreference
+  github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonschema:
+    license: Apache-2.0
+    license_url: github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonschema/LICENSE-APACHE-2.0.txt
+    project_url: github.com/newrelic/nri-haproxy/vendor/github.com/xeipuuv/gojsonschema
