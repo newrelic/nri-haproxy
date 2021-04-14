@@ -1,0 +1,981 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "required": [
+    "name",
+    "protocol_version",
+    "integration_version",
+    "data"
+  ],
+  "properties": {
+    "name": {
+      "minLength": 1,
+      "pattern": "^com.newrelic.haproxy$",
+      "type": "string"
+    },
+    "protocol_version": {
+      "minLength": 1,
+      "pattern": "^3$",
+      "type": "string"
+    },
+    "integration_version": {
+      "minLength": 1,
+      "pattern": "^[0-9]+.[0-9]+.[0-9]+$",
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "minLength": 1,
+                  "pattern": "^stats/FRONTEND$",
+                  "type": "string"
+                },
+                "type": {
+                  "minLength": 1,
+                  "pattern": "^ha-frontend$",
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "Key",
+                      "Value"
+                    ],
+                    "properties": {
+                      "Key": {
+                        "minLength": 1,
+                        "pattern": "^clusterName$",
+                        "type": "string"
+                      },
+                      "Value": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "metrics": {
+              "minItems": 1,
+              "uniqueItems": true,
+              "type": "array",
+              "items":{
+                "type": "object",
+                "required": [
+                  "displayName",
+                  "entityName",
+                  "event_type",
+                  "frontend.bytesInPerSecond",
+                  "frontend.bytesOutPerSecond",
+                  "frontend.connectionsPerSecond",
+                  "frontend.currentSessions",
+                  "frontend.http100ResponsesPerSecond",
+                  "frontend.http200ResponsesPerSecond",
+                  "frontend.http300ResponsesPerSecond",
+                  "frontend.http400ResponsesPerSecond",
+                  "frontend.http500ResponsesPerSecond",
+                  "frontend.httpOtherResponsesPerSecond",
+                  "frontend.httpRequests.maxPerSecond",
+                  "frontend.httpRequestsPerSecond",
+                  "frontend.interceptedRequestsPerSecond",
+                  "frontend.maxConnectionsPerSecond",
+                  "frontend.maxSessions",
+                  "frontend.maxSessionsPerSecond",
+                  "frontend.mode",
+                  "frontend.proxyName",
+                  "frontend.requestErrorsPerSecond",
+                  "frontend.requestsDenied.securityConcernsPerSecond",
+                  "frontend.requestsDenied.tcpRequestConnectionRulesPerSecond",
+                  "frontend.requestsDenied.tcpRequestSessionRulesPerSecond",
+                  "frontend.responsesDenied.securityConcernsPerSecond",
+                  "frontend.serviceName",
+                  "frontend.sessionsPerSecond",
+                  "frontend.status",
+                  "frontend.type",
+                  "haproxyClusterName",
+                  "reportingEndpoint"
+                ],
+                "properties": {
+                  "displayName": {
+                    "minLength": 1,
+                    "pattern": "^stats/FRONTEND$",
+                    "type": "string"
+                  },
+                  "entityName": {
+                    "minLength": 1,
+                    "pattern": "^ha-frontend:stats/FRONTEND$",
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "minLength": 1,
+                    "pattern": "^HAProxyFrontendSample$",
+                    "type": "string"
+                  },
+                  "frontend.bytesInPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.bytesOutPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.connectionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.currentSessions": {
+                    "type": "integer"
+                  },
+                  "frontend.http100ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.http200ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.http300ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.http400ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.http500ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.httpOtherResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.httpRequests.maxPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.httpRequestsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.interceptedRequestsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.maxConnectionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.maxSessions": {
+                    "type": "integer"
+                  },
+                  "frontend.maxSessionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.mode": {
+                    "type": "string"
+                  },
+                  "frontend.proxyName": {
+                    "type": "string"
+                  },
+                  "frontend.requestErrorsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.requestsDenied.securityConcernsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.requestsDenied.tcpRequestConnectionRulesPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.requestsDenied.tcpRequestSessionRulesPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.responsesDenied.securityConcernsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.serviceName": {
+                    "type": "string"
+                  },
+                  "frontend.sessionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "frontend.status": {
+                    "type": "string"
+                  },
+                  "frontend.type": {
+                    "type": "integer"
+                  },
+                  "haproxyClusterName": {
+                    "type": "string"
+                  },
+                  "reportingEndpoint": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "inventory": {
+              "minProperties": 1,
+              "required": [
+                "iid",
+                "pid",
+                "rate_lim",
+                "sid",
+                "slim"
+              ],
+              "type": "object",
+              "properties": {
+                "iid": {
+                  "required": [
+                    "value"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "pid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "rate_lim": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "sid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "slim": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "required": [],
+                "type": []
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "Key",
+                      "Value"
+                    ],
+                    "properties": {
+                      "Key": {
+                        "minLength": 1,
+                        "pattern": "^clusterName$",
+                        "type": "string"
+                      },
+                      "Value": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "displayName",
+                  "entityName",
+                  "event_type",
+                  "haproxyClusterName",
+                  "reportingEndpoint",
+                  "server.averageConnectTimeInSeconds",
+                  "server.averageQueueTimeInSeconds",
+                  "server.averageResponseTimeInSeconds",
+                  "server.averageTotalSessionTimeInSeconds",
+                  "server.bytesInPerSecond",
+                  "server.bytesOutPerSecond",
+                  "server.checkStatusDescription",
+                  "server.connectingRequestErrorsPerSecond",
+                  "server.connectionRetriesPerSecond",
+                  "server.currentQueuedRequestsWithoutServer",
+                  "server.currentSessions",
+                  "server.dataTransfersAbortedByClientPerSecond",
+                  "server.dataTransfersAbortedByServerPerSecond",
+                  "server.downtimeInSeconds",
+                  "server.failedChecksPerSecond",
+                  "server.healthCheckContents",
+                  "server.healthCheckDurationInMilliseconds",
+                  "server.healthCheckStatus",
+                  "server.http100ResponsesPerSecond",
+                  "server.http200ResponsesPerSecond",
+                  "server.http300ResponsesPerSecond",
+                  "server.http400ResponsesPerSecond",
+                  "server.http500ResponsesPerSecond",
+                  "server.httpOtherResponsesPerSecond",
+                  "server.isActive",
+                  "server.isBackup",
+                  "server.maxQueuedRequestsWithoutServer",
+                  "server.maxSessions",
+                  "server.maxSessionsPerSecond",
+                  "server.mode",
+                  "server.proxyName",
+                  "server.requestRedispatchPerSecond",
+                  "server.responseErrorsPerSecond",
+                  "server.responsesDenied.securityConcernsPerSecond",
+                  "server.serverID",
+                  "server.serverSelectedPerSecond",
+                  "server.serverWeight",
+                  "server.serviceName",
+                  "server.sessionsPerSecond",
+                  "server.status",
+                  "server.timeSinceLastSessionAssignedInSeconds",
+                  "server.timeSinceLastUpDownTransitionInSeconds",
+                  "server.type",
+                  "server.upToDownTransitionsPerSecond",
+                  "server.agentCheckContents",
+                  "server.agentDurationSeconds",
+                  "server.agentStatus",
+                  "server.agentStatusDescription"
+                ],
+                "properties": {
+                  "displayName": {
+                    "minLength": 1,
+                    "pattern": "^stats/api1$",
+                    "type": "string"
+                  },
+                  "entityName": {
+                    "minLength": 1,
+                    "pattern": "^ha-server:stats/api1$",
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "minLength": 1,
+                    "pattern": "^HAProxyServerSample$",
+                    "type": "string"
+                  },
+                  "haproxyClusterName": {
+                    "type": "string"
+                  },
+                  "reportingEndpoint": {
+                    "type": "string"
+                  },
+                  "server.averageConnectTimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "server.averageQueueTimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "server.averageResponseTimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "server.averageTotalSessionTimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "server.bytesInPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.bytesOutPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.checkStatusDescription": {
+                    "type": "string"
+                  },
+                  "server.connectingRequestErrorsPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.connectionRetriesPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.currentQueuedRequestsWithoutServer": {
+                    "type": "integer"
+                  },
+                  "server.currentSessions": {
+                    "type": "integer"
+                  },
+                  "server.dataTransfersAbortedByClientPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.dataTransfersAbortedByServerPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.downtimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "server.failedChecksPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.healthCheckContents": {
+                    "type": "string"
+                  },
+                  "server.healthCheckDurationInMilliseconds": {
+                    "type": "integer"
+                  },
+                  "server.healthCheckStatus": {
+                    "type": "string"
+                  },
+                  "server.http100ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.http200ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.http300ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.http400ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.http500ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.httpOtherResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.isActive": {
+                    "type": "integer"
+                  },
+                  "server.isBackup": {
+                    "type": "integer"
+                  },
+                  "server.maxQueuedRequestsWithoutServer": {
+                    "type": "integer"
+                  },
+                  "server.maxSessions": {
+                    "type": "integer"
+                  },
+                  "server.maxSessionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.mode": {
+                    "type": "string"
+                  },
+                  "server.proxyName": {
+                    "type": "string"
+                  },
+                  "server.requestRedispatchPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.responseErrorsPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.responsesDenied.securityConcernsPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.serverID": {
+                    "type": "string"
+                  },
+                  "server.serverSelectedPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.serverWeight": {
+                    "type": "integer"
+                  },
+                  "server.serviceName": {
+                    "type": "string"
+                  },
+                  "server.sessionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.status": {
+                    "type": "string"
+                  },
+                  "server.timeSinceLastSessionAssignedInSeconds": {
+                    "type": "integer"
+                  },
+                  "server.timeSinceLastUpDownTransitionInSeconds": {
+                    "type": "integer"
+                  },
+                  "server.type": {
+                    "type": "integer"
+                  },
+                  "server.upToDownTransitionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "server.agentCheckContents": {
+                    "type": "string"
+                  },
+                  "server.agentDurationSeconds": {
+                    "type": "integer"
+                  },
+                  "server.agentStatus": {
+                    "type": "string"
+                  },
+                  "server.agentStatusDescription": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "inventory": {
+              "minProperties": 1,
+              "type": "object",
+              "required": [
+                "iid",
+                "pid",
+                "qmax",
+                "sid"
+              ],
+              "properties": {
+                "iid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "pid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "qmax": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "sid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "events": {
+              "type": "array"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "entity",
+            "metrics",
+            "inventory",
+            "events"
+          ],
+          "properties": {
+            "entity": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "id_attributes"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "id_attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "Key",
+                      "Value"
+                    ],
+                    "properties": {
+                      "Key": {
+                        "minLength": 1,
+                        "pattern": "^clusterName$",
+                        "type": "string"
+                      },
+                      "Value": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "backend.activeServers",
+                  "backend.averageConnectTimeInSeconds",
+                  "backend.averageQueueTimeInSeconds",
+                  "backend.averageResponseTimeInSeconds",
+                  "backend.averageTotalSessionTimeInSeconds",
+                  "backend.backupServers",
+                  "backend.bytesInPerSecond",
+                  "backend.bytesOutPerSecond",
+                  "backend.bytesThatBypassedCompressorPerSecond",
+                  "backend.connectingRequestErrorsPerSecond",
+                  "backend.connectionRetriesPerSecond",
+                  "backend.currentQueuedRequestsWithoutServer",
+                  "backend.currentSessions",
+                  "backend.dataTransfersAbortedByClientPerSecond",
+                  "backend.dataTransfersAbortedByServerPerSecond",
+                  "backend.downtimeInSeconds",
+                  "backend.http100ResponsesPerSecond",
+                  "backend.http200ResponsesPerSecond",
+                  "backend.http300ResponsesPerSecond",
+                  "backend.http400ResponsesPerSecond",
+                  "backend.http500ResponsesPerSecond",
+                  "backend.httpOtherResponsesPerSecond",
+                  "backend.httpRequestsPerSecond",
+                  "backend.httpResponseBytesEmittedByCompressorPerSecond",
+                  "backend.httpResponseBytesFedToCompressorPerSecond",
+                  "backend.httpResponsesCompressedPerSecond",
+                  "backend.maxQueuedRequestsWithoutServer",
+                  "backend.maxSessions",
+                  "backend.maxSessionsPerSecond",
+                  "backend.mode",
+                  "backend.proxyName",
+                  "backend.requestRedispatchPerSecond",
+                  "backend.requestsDenied.securityConcernsPerSecond",
+                  "backend.responseErrorsPerSecond",
+                  "backend.responsesDenied.securityConcernsPerSecond",
+                  "backend.serverSelectedPerSecond",
+                  "backend.sessionsPerSecond",
+                  "backend.status",
+                  "backend.timeSinceLastSessionAssignedInSeconds",
+                  "backend.timeSinceLastUpDownTransitionInSeconds",
+                  "backend.totalWeight",
+                  "backend.type",
+                  "backend.upToDownTransitionsPerSecond",
+                  "displayName",
+                  "entityName",
+                  "event_type",
+                  "haproxyClusterName",
+                  "reportingEndpoint"
+                ],
+                "properties": {
+                  "backend.activeServers": {
+                    "type": "integer"
+                  },
+                  "backend.averageConnectTimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "backend.averageQueueTimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "backend.averageResponseTimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "backend.averageTotalSessionTimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "backend.backupServers": {
+                    "type": "integer"
+                  },
+                  "backend.bytesInPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.bytesOutPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.bytesThatBypassedCompressorPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.connectingRequestErrorsPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.connectionRetriesPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.currentQueuedRequestsWithoutServer": {
+                    "type": "integer"
+                  },
+                  "backend.currentSessions": {
+                    "type": "integer"
+                  },
+                  "backend.dataTransfersAbortedByClientPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.dataTransfersAbortedByServerPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.downtimeInSeconds": {
+                    "type": "integer"
+                  },
+                  "backend.http100ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.http200ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.http300ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.http400ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.http500ResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.httpOtherResponsesPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.httpRequestsPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.httpResponseBytesEmittedByCompressorPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.httpResponseBytesFedToCompressorPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.httpResponsesCompressedPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.maxQueuedRequestsWithoutServer": {
+                    "type": "integer"
+                  },
+                  "backend.maxSessions": {
+                    "type": "integer"
+                  },
+                  "backend.maxSessionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.mode": {
+                    "type": "string"
+                  },
+                  "backend.proxyName": {
+                    "type": "string"
+                  },
+                  "backend.requestRedispatchPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.requestsDenied.securityConcernsPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.responseErrorsPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.responsesDenied.securityConcernsPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.serverSelectedPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.sessionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "backend.status": {
+                    "type": "string"
+                  },
+                  "backend.timeSinceLastSessionAssignedInSeconds": {
+                    "type": "integer"
+                  },
+                  "backend.timeSinceLastUpDownTransitionInSeconds": {
+                    "type": "integer"
+                  },
+                  "backend.totalWeight": {
+                    "type": "integer"
+                  },
+                  "backend.type": {
+                    "type": "integer"
+                  },
+                  "backend.upToDownTransitionsPerSecond": {
+                    "type": "integer"
+                  },
+                  "displayName": {
+                    "minLength": 1,
+                    "pattern": "^stats/BACKEND$",
+                    "type": "string"
+                  },
+                  "entityName": {
+                    "minLength": 1,
+                    "pattern": "^ha-backend:stats/BACKEND$",
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "minLength": 1,
+                    "pattern": "^HAProxyBackendSample$",
+                    "type": "string"
+                  },
+                  "haproxyClusterName": {
+                    "type": "string"
+                  },
+                  "reportingEndpoint": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "inventory": {
+              "minProperties": 1,
+              "type": "object",
+              "required": [
+                "iid",
+                "pid",
+                "qmax",
+                "sid",
+                "slim"
+              ],
+              "properties": {
+                "iid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "pid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "qmax": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "sid": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                },
+                "slim": {
+                  "type": "object",
+                  "required": [
+                    "value"
+                  ],
+                  "properties": {
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "events": {
+              "type": "array"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
