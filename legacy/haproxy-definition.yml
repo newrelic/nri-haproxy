@@ -1,5 +1,5 @@
 name: com.newrelic.haproxy
-description: Reports status and metrics for haproxy service
+description: Reports status and metrics for haproxy service. Legacy file kept for compatibility.
 protocol_version: 2
 os: linux
 
