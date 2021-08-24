@@ -2,16 +2,16 @@ integrations:
 - name: nri-haproxy
   env:
     # A user defined cluster name for the HAProxy instance
-    ha_proxy_cluster_name: my_haproxy_1
+    HA_PROXY_CLUSTER_NAME: my_haproxy_1
 
     # Basic auth username
-    username: cacheuser
+    USERNAME: cacheuser
     # Basic auth password
-    password: password
+    PASSWORD: password
     
     # The URL to the enabled stats page on the
     # HAProxy instance
-    stats_url: http://haproxy-instance/stats
+    STATS_URL: http://haproxy-instance/stats
 
   interval: 15s
   labels:
