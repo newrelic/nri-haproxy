@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.3.3  (2022-06-29)
+### Changed
+- Bump dependencies
+### Added
+Added support for more distributions:
+- RHEL(EL) 9
+- Ubuntu 22.04
+
 ## 2.3.2 (2021-10-20)
 ### Added
 Added support for more distributions:
