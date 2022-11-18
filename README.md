@@ -1,5 +1,4 @@
-[![Community Plus header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Community_Plus.png)](https://opensource.newrelic.com/oss-category/#community-plus)
-
+[![Community Plus header](https://github.com/newrelic/opensource-website/raw/main/src/images/categories/Community_Plus.png)](https://opensource.newrelic.com/oss-category/#community-plus)
 # New Relic integration for HAProxy
 
 Reports status and metrics for HAProxy service. See our [documentation web site](https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/haproxy-monitoring-integration) for more details.
