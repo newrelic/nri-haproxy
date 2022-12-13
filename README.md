@@ -13,8 +13,7 @@ For installation and usage instructions, see our [documentation web site](https:
 
 ## Compatibility
 
-* Supported OS: No limitations
-* Supported versions: HAProxy 1.3 - 1.8
+For compatibility and requirements, see our [documentation web site](https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/haproxy-monitoring-integration).
 
 ## Building
 
