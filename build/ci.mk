@@ -52,8 +52,8 @@ else
 	exit 1
 endif
 
-.PHONY : ci/fake-prerelease
-ci/fake-prerelease: ci/deps
+.PHONY : ci/prerelease
+ci/prerelease: ci/deps
 ifdef TAG
 	@docker run --rm -t \
 			--name "nri-$(INTEGRATION)-prerelease" \
