@@ -1,14 +1,36 @@
 package main
 
 import (
+	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 )
 
 // TODO delete unnecessary fields
 
+type valueAmendment func(any) (any, error)
+
+func millisToSeconds(v any) (any, error) {
+	asFloat, err := strconv.ParseFloat(fmt.Sprintf("%v", v), 64)
+	if err != nil {
+		return v, fmt.Errorf("expected numeric value: %w", err)
+	}
+	return (time.Duration(asFloat) * time.Millisecond).Seconds(), nil
+}
+
 type metricDefinition struct {
 	MetricName string
 	SourceType metric.SourceType
+	Amend      valueAmendment
+}
+
+func (m *metricDefinition) value(metricValue any) (any, error) {
+	if m.Amend != nil {
+		return m.Amend(metricValue)
+	}
+	return metricValue, nil
 }
 
 // HAProxyFrontendStats holds the metric definitions for a frontend
@@ -82,10 +104,10 @@ var HAProxyBackendStats = map[string]metricDefinition{
 	"comp_byp":    {MetricName: "backend.bytesThatBypassedCompressorPerSecond", SourceType: metric.PRATE},
 	"comp_rsp":    {MetricName: "backend.httpResponsesCompressedPerSecond", SourceType: metric.PRATE},
 	"lastsess":    {MetricName: "backend.timeSinceLastSessionAssignedInSeconds", SourceType: metric.GAUGE},
-	"qtime":       {MetricName: "backend.averageQueueTimeInSeconds", SourceType: metric.GAUGE},
-	"ctime":       {MetricName: "backend.averageConnectTimeInSeconds", SourceType: metric.GAUGE},
-	"rtime":       {MetricName: "backend.averageResponseTimeInSeconds", SourceType: metric.GAUGE},
-	"ttime":       {MetricName: "backend.averageTotalSessionTimeInSeconds", SourceType: metric.GAUGE},
+	"qtime":       {MetricName: "backend.averageQueueTimeInSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
+	"ctime":       {MetricName: "backend.averageConnectTimeInSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
+	"rtime":       {MetricName: "backend.averageResponseTimeInSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
+	"ttime":       {MetricName: "backend.averageTotalSessionTimeInSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
 	"cookie":      {MetricName: "backend.cookieName", SourceType: metric.ATTRIBUTE},
 	"mode":        {MetricName: "backend.mode", SourceType: metric.ATTRIBUTE},
 	"intercepted": {MetricName: "backend.interceptedRequestsPerSecond", SourceType: metric.PRATE},
@@ -136,12 +158,12 @@ var HAProxyServerStats = map[string]metricDefinition{
 	"lastsess":       {MetricName: "server.timeSinceLastSessionAssignedInSeconds", SourceType: metric.GAUGE},
 	"last_chk":       {MetricName: "server.healthCheckContents", SourceType: metric.ATTRIBUTE},
 	"last_agt":       {MetricName: "server.agentCheckContents", SourceType: metric.ATTRIBUTE},
-	"qtime":          {MetricName: "server.averageQueueTimeInSeconds", SourceType: metric.GAUGE},
-	"ctime":          {MetricName: "server.averageConnectTimeInSeconds", SourceType: metric.GAUGE},
-	"rtime":          {MetricName: "server.averageResponseTimeInSeconds", SourceType: metric.GAUGE},
-	"ttime":          {MetricName: "server.averageTotalSessionTimeInSeconds", SourceType: metric.GAUGE},
+	"qtime":          {MetricName: "server.averageQueueTimeInSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
+	"ctime":          {MetricName: "server.averageConnectTimeInSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
+	"rtime":          {MetricName: "server.averageResponseTimeInSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
+	"ttime":          {MetricName: "server.averageTotalSessionTimeInSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
 	"agent_status":   {MetricName: "server.agentStatus", SourceType: metric.ATTRIBUTE},
-	"agent_duration": {MetricName: "server.agentDurationSeconds", SourceType: metric.GAUGE},
+	"agent_duration": {MetricName: "server.agentDurationSeconds", SourceType: metric.GAUGE, Amend: millisToSeconds},
 	"check_desc":     {MetricName: "server.checkStatusDescription", SourceType: metric.ATTRIBUTE},
 	"agent_desc":     {MetricName: "server.agentStatusDescription", SourceType: metric.ATTRIBUTE},
 	"cookie":         {MetricName: "server.cookieValue", SourceType: metric.ATTRIBUTE},
