@@ -1,4 +1,4 @@
-name: Prerelease pipeline
+name: Create prerelease artifacts
 
 on:
   release:
@@ -196,3 +196,15 @@ jobs:
           packageLocation: repo
           stagingRepo: true
           upgrade: false
+
+  notify-failure:
+    if: ${{ always() && failure() }}
+    needs: [test-nix, test-windows, test-integration-nix, prerelease, package-win, publish-to-s3]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify failure via Slack
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.COREINT_SLACK_TOKEN }}
+          slack-channel: ${{ secrets.COREINT_SLACK_CHANNEL }}
+          slack-text: "❌ `${{ env.ORIGINAL_REPO_NAME }}`: [prerelease pipeline failed](${{ github.server_url }}/${{ env.ORIGINAL_REPO_NAME }}/actions/runs/${{ github.run_id }})."
