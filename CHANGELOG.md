@@ -10,7 +10,7 @@ Unreleased section should follow [Release Toolkit](https://github.com/newrelic/r
 ### breaking
 - `*InSeconds` metrics are now reported in seconds. The affected metrics used to be reported in milliseconds.
   Affected metrics: `backend.averageQueueTimeInSeconds`, `backend.averageResponseTimeInSeconds`,
-  `backend.averageTotalSessionTimeInSeconds`, `server.agentDurationInSeconds`, `server.averageConnectTimeInSeconds`,
+  `backend.averageTotalSessionTimeInSeconds`, `server.agentDurationSeconds`, `server.averageConnectTimeInSeconds`,
   `server.averageQueueTimeInSeconds`, `server.averageResponseTimeInSeconds`, `server.averageTotalSessionTimeInSeconds`.
 
 
