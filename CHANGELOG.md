@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
+### breaking
+- `*InSeconds` metrics are now reported in seconds. The affected metrics used to be reported in milliseconds.
+  Affected metrics: `backend.averageQueueTimeInSeconds`, `backend.averageResponseTimeInSeconds`,
+  `backend.averageTotalSessionTimeInSeconds`, `server.agentDurationSeconds`, `server.averageConnectTimeInSeconds`,
+  `server.averageQueueTimeInSeconds`, `server.averageResponseTimeInSeconds`, `server.averageTotalSessionTimeInSeconds`.
+
 
 ## v2.5.1 - 2023-10-31
 

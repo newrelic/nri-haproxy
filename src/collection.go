@@ -169,8 +169,12 @@ func collectMetricsOfType(entityType string, definitions map[string]metricDefini
 
 		def, ok := definitions[metricName]
 		if ok {
-			err := ms.SetMetric(def.MetricName, metricValue, def.SourceType)
+			value, err := def.value(metricValue)
 			if err != nil {
+				log.Error("Invalid metric %s value (%v) for entity %s: %s", metricName, metricValue, stats["pxname"], err)
+				continue
+			}
+			if err := ms.SetMetric(def.MetricName, value, def.SourceType); err != nil {
 				log.Error("Failed to set metric %s for entity %s: %s", metricName, stats["pxname"], err.Error())
 			}
 		}

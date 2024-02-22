@@ -129,6 +129,7 @@ func Test_collectInventoryOfType(t *testing.T) {
 	assert.Equal(t, nil, e.Inventory.Items()["empty"]["value"])
 }
 
+//nolint:paralleltest // integration being used to check metrics results
 func Test_collectMetrics(t *testing.T) {
 	i, _ := integration.New("test", "test")
 
@@ -144,13 +145,22 @@ func Test_collectMetrics(t *testing.T) {
 		"svname": "testsv",
 		"type":   "1",
 		"scur":   "1",
+		"qtime":  "10",
+		"ctime":  "11",
+		"rtime":  "12",
+		"ttime":  "13",
 	}
 
 	server := map[string]string{
-		"pxname": "testpx",
-		"svname": "testsv",
-		"type":   "2",
-		"scur":   "1",
+		"pxname":         "testpx",
+		"svname":         "testsv",
+		"type":           "2",
+		"scur":           "1",
+		"qtime":          "100",
+		"ctime":          "101",
+		"rtime":          "102",
+		"ttime":          "103",
+		"agent_duration": "104",
 	}
 
 	invalid := map[string]string{
@@ -180,8 +190,19 @@ func Test_collectMetrics(t *testing.T) {
 	}
 
 	assert.Equal(t, float64(1.0), frontendEntity.Metrics[0].Metrics["frontend.currentSessions"])
+
 	assert.Equal(t, float64(1.0), backendEntity.Metrics[0].Metrics["backend.currentSessions"])
+	assert.Equal(t, float64(0.01), backendEntity.Metrics[0].Metrics["backend.averageQueueTimeInSeconds"])
+	assert.Equal(t, float64(0.011), backendEntity.Metrics[0].Metrics["backend.averageConnectTimeInSeconds"])
+	assert.Equal(t, float64(0.012), backendEntity.Metrics[0].Metrics["backend.averageResponseTimeInSeconds"])
+	assert.Equal(t, float64(0.013), backendEntity.Metrics[0].Metrics["backend.averageTotalSessionTimeInSeconds"])
+
 	assert.Equal(t, float64(1.0), serverEntity.Metrics[0].Metrics["server.currentSessions"])
+	assert.Equal(t, float64(0.1), serverEntity.Metrics[0].Metrics["server.averageQueueTimeInSeconds"])
+	assert.Equal(t, float64(0.101), serverEntity.Metrics[0].Metrics["server.averageConnectTimeInSeconds"])
+	assert.Equal(t, float64(0.102), serverEntity.Metrics[0].Metrics["server.averageResponseTimeInSeconds"])
+	assert.Equal(t, float64(0.103), serverEntity.Metrics[0].Metrics["server.averageTotalSessionTimeInSeconds"])
+	assert.Equal(t, float64(0.104), serverEntity.Metrics[0].Metrics["server.agentDurationSeconds"])
 }
 
 func Test_collectInventory(t *testing.T) {
