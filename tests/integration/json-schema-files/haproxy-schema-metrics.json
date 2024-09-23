@@ -338,7 +338,6 @@
                   "server.timeSinceLastUpDownTransitionInSeconds",
                   "server.type",
                   "server.upToDownTransitionsPerSecond",
-                  "server.agentCheckContents",
                   "server.agentDurationSeconds",
                   "server.agentStatus",
                   "server.agentStatusDescription"
