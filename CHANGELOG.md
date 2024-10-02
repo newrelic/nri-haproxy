@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
+### enhancements
+
+- Upgrade integrations SDK so the interval is variable and allows intervals up to 5 minutes
+
 ## v3.0.3 - 2024-09-10
 
 ### ⛓️ Dependencies
