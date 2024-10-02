@@ -4,7 +4,7 @@ package integration
 
 import (
 	"flag"
-	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/infra-integrations-sdk/v3/log"
 	"github.com/newrelic/nri-haproxy/tests/integration/helpers"
 	"github.com/newrelic/nri-haproxy/tests/integration/jsonschema"
 	"github.com/stretchr/testify/assert"

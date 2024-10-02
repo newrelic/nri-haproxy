@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/v3/data/metric"
 )
 
 // TODO delete unnecessary fields
