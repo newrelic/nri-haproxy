@@ -1,18 +1,19 @@
-// +build integration
+//go:build integration
 
 package integration
 
 import (
 	"flag"
-	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/nri-haproxy/tests/integration/helpers"
-	"github.com/newrelic/nri-haproxy/tests/integration/jsonschema"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"testing"
+
+	"github.com/newrelic/infra-integrations-sdk/v3/log"
+	"github.com/newrelic/nri-haproxy/tests/integration/helpers"
+	"github.com/newrelic/nri-haproxy/tests/integration/jsonschema"
+	"github.com/stretchr/testify/assert"
 )
 
 var (
