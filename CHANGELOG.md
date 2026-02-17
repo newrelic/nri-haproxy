@@ -13,7 +13,6 @@ Unreleased section should follow [Release Toolkit](https://github.com/newrelic/r
 ### ⛓️ Dependencies
 - Updated golang patch version to v1.25.7
 
-
 ## v3.2.6 - 2026-02-10
 
 ### ⛓️ Dependencies
