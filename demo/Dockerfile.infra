@@ -1,0 +1,11 @@
+# Stage 1: compile nri-haproxy for linux inside a Go container
+FROM golang:1.25.9-bookworm AS builder
+WORKDIR /build
+COPY go.mod go.sum ./
+RUN go mod download
+COPY src/ ./src/
+RUN CGO_ENABLED=0 go build -o /nri-haproxy ./src/
+
+# Stage 2: infra agent with the binary baked in (correct arch, correct perms)
+FROM newrelic/infrastructure:latest
+COPY --from=builder /nri-haproxy /var/db/newrelic-infra/newrelic-integrations/bin/nri-haproxy

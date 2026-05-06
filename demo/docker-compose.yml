@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+
+  # ── HAProxy load balancer ──────────────────────────────────────────────────
+  haproxy:
+    image: haproxy:3.3
+    ports:
+      - "8080:8080"   # HTTP frontend (send test traffic here)
+      - "8404:8404"   # Stats page (nri-haproxy scrapes this)
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - web1
+      - web2
+      - web3
+      - api1
+      - api2
+    restart: unless-stopped
+
+  # ── Web backend servers (3 nodes, round-robin) ────────────────────────────
+  web1:
+    image: nginx:alpine
+    restart: unless-stopped
+
+  web2:
+    image: nginx:alpine
+    restart: unless-stopped
+
+  web3:
+    image: nginx:alpine
+    restart: unless-stopped
+
+  # ── API backend servers (2 nodes, least-connections) ─────────────────────
+  api1:
+    image: nginx:alpine
+    restart: unless-stopped
+
+  api2:
+    image: nginx:alpine
+    restart: unless-stopped
+
+  # ── New Relic Infrastructure agent ───────────────────────────────────────
+  # Builds nri-haproxy from source inside the image (avoids permission/arch
+  # issues with volume-mounted binaries on macOS).
+  # Requires a .env file with NEW_RELIC_LICENSE_KEY (copy from .env.example).
+  newrelic-infra:
+    build:
+      context: ..             # repo root — gives Dockerfile access to go.mod + src/
+      dockerfile: demo/Dockerfile.infra
+    volumes:
+      - ./newrelic-infra/integrations.d:/etc/newrelic-infra/integrations.d:ro
+    environment:
+      - NRIA_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
+      - NRIA_VERBOSE=0
+      - CLUSTER_NAME=${CLUSTER_NAME:-demo-otel-default}
+    cap_add:
+      - SYS_PTRACE
+    privileged: true
+    depends_on:
+      - haproxy
+    restart: unless-stopped
+
+  # ── OTel Collector with haproxyreceiver ──────────────────────────────────
+  # Scrapes the same HAProxy stats endpoint as nri-haproxy every 15s and
+  # ships metrics to New Relic via OTLP HTTP.
+  # Uses the contrib distribution because haproxyreceiver is not in core.
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    volumes:
+      - ${OTEL_CONFIG_FILE:-./otel/config.yaml}:/etc/otelcol-contrib/config.yaml
+    environment:
+      - NR_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
+    ports:
+      - "8888:8888"   # Collector's own metrics (health check / debug)
+    depends_on:
+      - haproxy
+    restart: unless-stopped
+
+  # ── Continuous traffic generator ──────────────────────────────────────────
+  # Sends a mix of web and API requests every 200ms so that metrics are
+  # populated with non-zero values when you run nri-haproxy.
+  traffic-gen:
+    image: busybox:latest
+    command: >
+      sh -c "
+        echo 'Traffic generator started...';
+        while true; do
+          wget -q -O- http://haproxy:8080/ > /dev/null 2>&1 || true;
+          wget -q -O- http://haproxy:8080/api/ > /dev/null 2>&1 || true;
+          wget -q -O- http://haproxy:8080/health > /dev/null 2>&1 || true;
+          sleep 0.2;
+        done
+      "
+    depends_on:
+      - haproxy
+    restart: on-failure

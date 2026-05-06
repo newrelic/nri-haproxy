@@ -1,0 +1,76 @@
+receivers:
+  haproxy:
+    # Same stats endpoint that nri-haproxy scrapes — both collectors
+    # hit the same HAProxy instance so the comparison is apples-to-apples.
+    endpoint: http://haproxy:8404/stats
+    collection_interval: 15s
+    # Enable all 16 optional metrics (disabled by default).
+    metrics:
+      haproxy.active:
+        enabled: true
+      haproxy.backup:
+        enabled: true
+      haproxy.clients.canceled:
+        enabled: true
+      haproxy.compression.bypass:
+        enabled: true
+      haproxy.compression.count:
+        enabled: true
+      haproxy.compression.input:
+        enabled: true
+      haproxy.compression.output:
+        enabled: true
+      haproxy.connections.average_time:
+        enabled: true
+      haproxy.connections.total:
+        enabled: true
+      haproxy.downtime:
+        enabled: true
+      haproxy.failed_checks:
+        enabled: true
+      haproxy.requests.average_time:
+        enabled: true
+      haproxy.responses.average_time:
+        enabled: true
+      haproxy.sessions.limit:
+        enabled: true
+      haproxy.sessions.total:
+        enabled: true
+      haproxy.weight:
+        enabled: true
+    # Enable the one resource attribute that is disabled by default.
+    resource_attributes:
+      haproxy.server.state:
+        enabled: true
+
+processors:
+  # Tags every metric with scenario=otel-full so NRQL can distinguish
+  # this run from an otel-default run in the same New Relic account.
+  resource:
+    attributes:
+      - key: haproxy.scenario
+        value: otel-full
+        action: insert
+
+  batch:
+    # Buffer up to 10s or 1000 metrics before flushing — reduces API calls.
+    timeout: 10s
+    send_batch_size: 1000
+
+exporters:
+  otlphttp/newrelic:
+    endpoint: https://otlp.nr-data.net:4318
+    headers:
+      api-key: ${env:NR_LICENSE_KEY}
+
+  # Logs every scraped metric to stdout — useful for verifying what
+  # the haproxyreceiver actually collects before checking New Relic.
+  debug:
+    verbosity: normal
+
+service:
+  pipelines:
+    metrics:
+      receivers: [haproxy]
+      processors: [resource, batch]
+      exporters: [otlphttp/newrelic, debug]

@@ -1,0 +1,38 @@
+receivers:
+  haproxy:
+    # Same stats endpoint that nri-haproxy scrapes — both collectors
+    # hit the same HAProxy instance so the comparison is apples-to-apples.
+    endpoint: http://haproxy:8404/stats
+    collection_interval: 15s
+
+processors:
+  # Tags every metric with scenario=otel-default so NRQL can distinguish
+  # this run from an otel-full run in the same New Relic account.
+  resource:
+    attributes:
+      - key: haproxy.scenario
+        value: otel-default
+        action: insert
+
+  batch:
+    # Buffer up to 10s or 1000 metrics before flushing — reduces API calls.
+    timeout: 10s
+    send_batch_size: 1000
+
+exporters:
+  otlphttp/newrelic:
+    endpoint: https://otlp.nr-data.net:4318
+    headers:
+      api-key: ${env:NR_LICENSE_KEY}
+
+  # Logs every scraped metric to stdout — useful for verifying what
+  # the haproxyreceiver actually collects before checking New Relic.
+  debug:
+    verbosity: normal
+
+service:
+  pipelines:
+    metrics:
+      receivers: [haproxy]
+      processors: [resource, batch]
+      exporters: [otlphttp/newrelic, debug]
