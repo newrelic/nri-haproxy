@@ -1,0 +1,9 @@
+integrations:
+  - name: nri-haproxy
+    env:
+      STATS_URL: http://haproxy:8404/stats
+      HA_PROXY_CLUSTER_NAME: {{CLUSTER_NAME}}
+    interval: 15s
+    labels:
+      env: demo
+      source: docker-compose

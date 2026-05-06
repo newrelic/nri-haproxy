@@ -41,6 +41,7 @@ debug
 
 Makefile-deploy.mk
 haproxy-config.yml
+!demo/newrelic-infra/integrations.d/haproxy-config.yml
 
 bin/
 dist/
