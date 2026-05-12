@@ -13,6 +13,5 @@ jobs:
   push-pr:
     uses: newrelic/coreint-automation/.github/workflows/reusable_push_pr.yaml@v3
     secrets: inherit
-      run_test_build_fake_prerelease: true
-      goarch_matrix: '["amd64"]'
+    with:
       integration: "haproxy"
