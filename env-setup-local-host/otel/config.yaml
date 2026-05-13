@@ -1,0 +1,34 @@
+receivers:
+  haproxy:
+    endpoint: http://127.0.0.1:8404/stats
+    collection_interval: 15s
+
+processors:
+  resource:
+    attributes:
+      - key: haproxy.scenario
+        value: local-otel
+        action: insert
+
+  batch:
+    timeout: 10s
+    send_batch_size: 1000
+
+exporters:
+  otlphttp/newrelic:
+    endpoint: https://staging-otlp.nr-data.net:4318
+    headers:
+      api-key: ${env:NEW_RELIC_LICENSE_KEY}
+
+  debug:
+    verbosity: normal
+
+service:
+  telemetry:
+    metrics:
+      address: ""  # Disable the collector's own Prometheus metrics endpoint (avoids port 8888 conflicts)
+  pipelines:
+    metrics:
+      receivers: [haproxy]
+      processors: [resource, batch]
+      exporters: [otlphttp/newrelic, debug]

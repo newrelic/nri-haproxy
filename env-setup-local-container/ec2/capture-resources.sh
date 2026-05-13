@@ -3,12 +3,12 @@
 # Run once at steady state (~15 min after start) and again after the 12-hour run.
 #
 # Usage (from repo root):
-#   bash demo/ec2/capture-resources.sh
+#   bash env-setup-local-container/ec2/capture-resources.sh
 
 set -euo pipefail
 cd "$(dirname "$0")/../.."   # repo root
 
-COMPOSE_FILE="demo/docker-compose.yml"
+COMPOSE_FILE="env-setup-local-container/docker-compose.yml"
 
 # Container names as defined in docker-compose.yml
 NRI_CONTAINER="demo-newrelic-infra-1"
@@ -51,5 +51,5 @@ done
 
 echo "================================================================"
 echo " Paste the above into the Confluence page's Resource Comparison"
-echo " section, or run: bash demo/ec2/capture-resources.sh >> resources.log"
+echo " section, or run: bash env-setup-local-container/ec2/capture-resources.sh >> resources.log"
 echo "================================================================"

@@ -4,8 +4,8 @@
 # It handles: first run, already running, config changes, source changes.
 #
 # Usage:
-#   ./demo/start.sh                # nri-haproxy + OTel default (18 metrics)
-#   ./demo/start.sh --otel-full    # nri-haproxy + all OTel optional metrics enabled
+#   ./env-setup-local-container/start.sh                # nri-haproxy + OTel default (18 metrics)
+#   ./env-setup-local-container/start.sh --otel-full    # nri-haproxy + all OTel optional metrics enabled
 
 set -euo pipefail
 cd "$(dirname "$0")"

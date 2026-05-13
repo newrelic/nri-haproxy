@@ -4,7 +4,7 @@
 # Run once, then log out and back in for the docker group to take effect.
 #
 # Usage:
-#   bash demo/ec2/provision.sh
+#   bash env-setup-local-container/ec2/provision.sh
 
 set -euo pipefail
 
@@ -90,7 +90,7 @@ echo " Next steps:"
 echo "   exit"
 echo "   ssh -i your-key.pem \$(whoami)@<instance-ip>"
 echo "   cd nri-haproxy"
-echo "   cp demo/.env.example demo/.env"
-echo "   nano demo/.env   # set NEW_RELIC_LICENSE_KEY"
-echo "   ./demo/start.sh"
+echo "   cp env-setup-local-container/.env.example env-setup-local-container/.env"
+echo "   nano env-setup-local-container/.env   # set NEW_RELIC_LICENSE_KEY"
+echo "   ./env-setup-local-container/start.sh"
 echo "================================================================"

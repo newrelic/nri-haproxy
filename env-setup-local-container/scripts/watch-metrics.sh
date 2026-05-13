@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # watch-metrics.sh — poll nri-haproxy every N seconds and show a live metric
 # summary table. Good for watching metrics change as traffic flows.
-# Usage: ./demo/scripts/watch-metrics.sh [interval_seconds]
+# Usage: ./env-setup-local-container/scripts/watch-metrics.sh [interval_seconds]
 
 set -euo pipefail
 

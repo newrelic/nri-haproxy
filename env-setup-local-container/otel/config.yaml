@@ -21,7 +21,7 @@ processors:
 
 exporters:
   otlphttp/newrelic:
-    endpoint: https://otlp.nr-data.net:4318
+    endpoint: https://staging-otlp.nr-data.net:4318
     headers:
       api-key: ${env:NR_LICENSE_KEY}
 

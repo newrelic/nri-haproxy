@@ -47,12 +47,13 @@ services:
   newrelic-infra:
     build:
       context: ..             # repo root — gives Dockerfile access to go.mod + src/
-      dockerfile: demo/Dockerfile.infra
+      dockerfile: env-setup-local-container/Dockerfile.infra
     volumes:
       - ./newrelic-infra/integrations.d:/etc/newrelic-infra/integrations.d:ro
     environment:
       - NRIA_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
       - NRIA_VERBOSE=0
+      - NRIA_COLLECTOR_URL=https://staging-infra-api.newrelic.com
       - CLUSTER_NAME=${CLUSTER_NAME:-demo-otel-default}
     cap_add:
       - SYS_PTRACE

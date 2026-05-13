@@ -1,0 +1,9 @@
+# Runtime state
+.pids/
+.logs/
+
+# Downloaded binaries
+.bin/
+
+# License key
+.env

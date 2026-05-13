@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # run-nri.sh — collect one snapshot of HAProxy metrics via nri-haproxy
-# Usage: ./demo/scripts/run-nri.sh [--raw]
+# Usage: ./env-setup-local-container/scripts/run-nri.sh [--raw]
 #   --raw  print the full JSON without filtering
 
 set -euo pipefail

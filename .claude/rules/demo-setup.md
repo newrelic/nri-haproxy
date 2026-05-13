@@ -1,7 +1,7 @@
-# demo/ — invariants
+# env-setup-local-container/ — invariants
 
 ## Binary must be compiled inside Docker
-`demo/docker-compose.yml` uses `build: { dockerfile: demo/Dockerfile.infra }` — not `image: newrelic/infrastructure:latest` with a volume-mounted binary.
+`env-setup-local-container/docker-compose.yml` uses `build: { dockerfile: env-setup-local-container/Dockerfile.infra }` — not `image: newrelic/infrastructure:latest` with a volume-mounted binary.
 Do not revert to the image+volume pattern. A macOS-compiled binary mounted into a Linux container produces `permission denied` at exec time regardless of chmod.
 
 ## /host/proc errors in newrelic-infra logs are harmless

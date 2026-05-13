@@ -3,7 +3,7 @@ description: Use when comparing nri-haproxy metric output against OTel haproxyre
 ---
 
 Produce a structured metric comparison between nri-haproxy and the OTel haproxyreceiver.
-The demo stack must be running (`./demo/start.sh` from the repo root).
+The demo stack must be running (`./env-setup-local-container/start.sh` from the repo root).
 
 ## Phase check
 
@@ -11,7 +11,7 @@ First, determine which phase we are in:
 - **Phase 1 only (nri-haproxy):** OTel collector is not yet in docker-compose. Capture the nri-haproxy baseline and document it fully. Skip the OTel and comparison sections.
 - **Phase 2 (both running):** Capture both, produce the full side-by-side comparison.
 
-Check by running: `docker compose -f demo/docker-compose.yml ps | grep otel`
+Check by running: `docker compose -f env-setup-local-container/docker-compose.yml ps | grep otel`
 If no output → Phase 1. If otel-collector is listed → Phase 2.
 
 ---
