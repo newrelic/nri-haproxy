@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
+## v3.4.1 - 2026-05-14
+
+### ⛓️ Dependencies
+- Updated golang patch version to v1.26.3
+
 ## v3.4.0 - 2026-04-28
 
 ### 🛡️ Security notices
