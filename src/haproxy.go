@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"os"
@@ -24,6 +25,7 @@ type argumentList struct {
 	ClusterName        string `default:"" help:"(Deprecated in favor of HAProxyClusterName)"`
 	HAProxyClusterName string `default:"" help:"Cluster name to identify this HAProxy instance."`
 	ShowVersion        bool   `default:"false" help:"Print build information and exit"`
+	InsecureSkipVerify bool   `default:"false" help:"Skip TLS certificate verification when connecting to the HAProxy stats page over HTTPS."`
 }
 
 var (
@@ -70,6 +72,12 @@ func main() {
 		log.Warn("Using the deprecated config ClusterName instead of HAProxyClusterName")
 	}
 	client := &http.Client{}
+	if args.InsecureSkipVerify {
+		log.Warn("InsecureSkipVerify is enabled, TLS certificate verification will be skipped")
+		client.Transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // nolint: gosec
+		}
+	}
 
 	// Create the http request
 	req, err := createStatsRequest(args.Username, args.Password, addCSVtoURL(args.StatsURL))
