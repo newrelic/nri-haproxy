@@ -13,6 +13,10 @@ integrations:
     # HAProxy instance
     STATS_URL: http://haproxy-instance/stats
 
+    # Skip TLS certificate verification when STATS_URL uses HTTPS.
+    # Only enable this if you trust the network path to the HAProxy instance.
+    # INSECURE_SKIP_VERIFY: false
+
   interval: 15s
   labels:
     env: production
